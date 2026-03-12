@@ -34,7 +34,6 @@ cart.forEach(item => {
     <p>Qty: ${item.quantity}</p>
     </div>
     `;
-renderCart()
     });
 
     }
