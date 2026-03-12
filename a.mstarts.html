@@ -1,0 +1,361 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>A&M Infinity Bites</title>
+
+<link rel="icon" href="images/unnamed111.jpg" type="image/x-icon">
+
+
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" 
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    
+    }
+
+    body {
+      background: #fffdf8;
+      color: #333;
+    }
+
+    header {
+      background: linear-gradient(90deg, #ff7f50, #ffa502);
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      margin-bottom: 5px;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      background: #fff;
+      padding: 12px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #ff7f50;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .hero {
+      padding: 60px 20px;
+      text-align: center;
+      background: url('https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea') center/cover;
+      color: white;
+    }
+
+    .hero h2 {
+      font-size: 2.2rem;
+      background: rgba(0,0,0,0.5);
+      display: inline-block;
+      padding: 15px 25px;
+      border-radius: 10px;
+    }
+
+    section {
+      padding: 50px 20px;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 1.8rem;
+      color: #ff7f50;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      overflow: hidden;
+      transition: transform 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .card-body {
+      padding: 15px;
+    }
+
+    .price {
+      font-weight: bold;
+      margin: 8px 0;
+      color: #2ed573;
+    }
+
+    button {
+      background: #ff7f50;
+      color: white;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #ff5722;
+    }
+
+    .about{
+      text-align: center;
+      line-height: 1.6;
+      font-size: 1.05rem;
+    }
+
+    .contact {
+      text-align: center;
+      line-height: 1.6;
+      font-size: 1.05rem;
+    }
+
+    .cart-box {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #ff7f50;
+      color: white;
+      padding: 15px 18px;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    footer {
+      background: #333;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+
+    @media (max-width:600px) {
+      .hero h2 { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>A&M Infinity Bites</h1>
+  <p>Fresh Fruit Salad • Parfaits • Healthy Treats</p>
+</header>
+
+<nav>
+  <a onclick="scrollToSection('menu')">Menu</a>
+  <a onclick="scrollToSection('about')">About</a>
+  <a onclick="scrollToSection('contact')">Contact</a>
+</nav>
+
+<div class="hero">
+  <h2>Healthy • Tasty • Sweet</h2>
+</div>
+
+<section id="menu">
+  <h2 class="section-title">Our Menu</h2>
+  <div class="products" id="productList"></div>
+</section>
+
+<section id="about">
+  <h2 class="section-title">About Us</h2>
+  <div class="about">
+    We prepare fresh fruit salad parfaits and healthy snack bowls daily using
+    quality ingredients. Perfect for breakfast, events, fitness meals, and
+    sweet healthy cravings.
+  </div>
+</section>
+
+<section id="contact">
+  <h2 class="section-title">Contact & Orders</h2>
+  <div class="contact">
+   <a href="https://wa.me/2348072683326" target="_blank">WhatsApp: +2348072683326</a><br>
+    <a href="https://www.instagram.com/a.m_infinity_bites" target="_blank">Instagram: @a.m_infinity_bites</a><br>
+    <a href="https://www.tiktok.com/@am.infinity.bites" target="_blank">Tiktok: @am.infinity.bites</a><br>
+    Open: Mon–Sat
+    Time: 8am–6pm
+  </div>
+</section>
+
+<div class="cart-box" onclick="viewCart()">
+  Cart (<span id="cartCount">0</span>)
+</div>
+
+<footer>
+  © 2026 A&M Infinity Bites — All rights reserved
+</footer>
+
+<script>
+  const products = [
+    {
+      name: "Classic Fruit Parfait",
+      price: 2500,
+      img: "images/unnamed111.jpg"
+    },
+    {
+      name: "Healthy Fruit Blend",
+      price: 8000,
+      img: "images/ab15.jpg"
+    },
+    {
+      name: "Yogurt drowling bites",
+      price: 4000,
+      img: "images/ab10.jpg"
+    },
+    {
+      name: "fresh Salad Mix",
+      price: 20000,
+      img: "images/ab8.jpg"
+    },
+     {
+      name: "Bossy Special",
+      price: 6000,
+      img: "images/ab2.jpg"
+     }
+  ];
+
+  const cart = [];
+
+  function renderProducts() {
+    const list = document.getElementById("productList");
+    list.innerHTML = "";
+
+    products.forEach((p, i) => {
+      list.innerHTML += `
+        <div class="card">
+          <img src="${p.img}" alt="${p.name}">
+          <div class="card-body">
+            <h3>${p.name}</h3>
+            <div class="price">₦${p.price}</div>
+            <button onclick="addToCart(${i})">Add to Cart</button>
+          </div>
+        </div>`;
+    });
+  }
+
+  function addToCart(i) {
+
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    cart.push(products[i]);
+    document.getElementById("cartCount")
+    .innerText = cart.length;
+    (products[i].name + " added to cart");
+    localStorage.setItem("cart", JSON.stringify(cart));}
+
+
+
+
+
+   
+   
+  /*
+   let addToCart  = JSON.parse(localStorage.setItem("cart")) || []; 
+
+    let  product = products[i];
+     cart.push(product);
+     localStorage.setItem("cart", JSON.stringify(cart));
+*/
+  
+
+  /*if item aready exist in cart, update quantity instead of adding new item
+    let existingItem = 
+    cart.find(item => item.name === product.name);
+
+    if (existingItem) {
+      existingItem.quantity = (existingItem.quantity || 1) + 1;
+    } else {
+      cart.push({ ...product, quantity: 1 });
+    }*/
+
+    /* localStorage.setItem("addToCart", JSON.stringify(cart));
+     document.getElementById("cartCount")
+     .innerText = cart.length;
+     alert(product.name + " added to cart");
+     console.log(cart);
+  */
+
+
+
+  function viewCart() {
+    window.location.href = "cart.html";
+    if (cart.length === 0) {
+      (`Cart is empty`);
+      return;
+    
+    };
+
+   
+   
+
+    
+   /*
+   let cart = JSON.parse(localStorage.getItem("cart")) || [];
+   
+    function addToCart(img,name,price) {
+      cart.push({ img, name, price });
+      document.getElementById("cartCount").innerText = cart.length;
+      (name + " added to cart");
+    }
+
+    localStorage.saveitem("addToCart", JSON.stringify(carted-item));
+
+  alert("Item added to cart");
+      return;
+      */
+
+    let total = cart.reduce((s, p) => s + p.price, 0);
+    let names = cart.map(p => p.name).join("\n");
+
+    alert("Your Cart:\n\n" + names + "\n\nTotal: ₦" + total);
+  }
+
+  function scrollToSection(id) {
+    document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+  }
+
+  renderProducts();
+</script>
+
+<script src="script/cart.js" type="module"></script>
+
+</body>
+</html>
