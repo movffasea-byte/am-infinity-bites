@@ -1,7 +1,3 @@
-
-
-
-  
     let list = document.getElementById("productList");  
 
     products.forEach((p,i) => {
@@ -11,7 +7,11 @@
           <div class="card-body">
             <h3>${p.name}</h3>
             <div class="price">₦${p.price}</div>
-            <button onclick="addToCart(${i})">Add to Cart</button>
+            <button class="js-add-to-cart" 
+            data-products-id="${p.id}" 
+            onclick="addToCart(${i})">
+            Add to Cart
+            </button>
           </div>
         </div>
         `;
@@ -19,8 +19,36 @@
     });
     
   
-    document.querySelector(".js-products-menu").
+    document.querySelector(".js-products-menu")
     innerHTML = products;
+
+  document.querySelectorAll(".js-add-to-cart")
+   .forEach((button) =>{
+     button.addEventListener(`click`, () => {
+       const productId = button.dataset.
+       productsId;
+       
+       
+       let existingItem;
+
+       cart.forEach((item) => {
+        if (productId === item.productId) {
+          existingItem = item;
+        }
+      });
+
+        if (existingItem) {
+          existingItem.quantity += 1;
+        }else
+        { cart.push({
+        productId: productId,
+        quantity: 1
+       });
+      }
+
+       console.log(cart);
+       });
+    });
 
  /* function addToCart(i) {
 

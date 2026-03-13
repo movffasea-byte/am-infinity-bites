@@ -1,3 +1,10 @@
+const cart = [];
+
+
+
+
+
+
 /*
 rendercrt();a
 
@@ -15,7 +22,6 @@ cart.forEach(item => {
   `
   console.log(cart.js);
 });
-*/
 
  function loadCart() {
 
@@ -39,6 +45,6 @@ cart.forEach(item => {
     }
 
     loadCart();
-
+*/  
 
 
