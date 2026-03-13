@@ -1,4 +1,6 @@
-    let list = document.getElementById("productList");  
+   import {cart} from '../data/cart.js';
+   
+   let list = document.getElementById("productList");  
 
     products.forEach((p,i) => {
       list.innerHTML += `
