@@ -10,11 +10,7 @@
           <div class="card-body">
             <h3>${p.name}</h3>
             <div class="price">₦${p.price}</div>
-            <button class="js-add-to-cart" 
-            data-products-id="${p.id}" 
-            onclick="addToCart(${i})">
-            Add to Cart
-            </button>
+            <button>
           </div>
         </div>
         `;
