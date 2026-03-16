@@ -10,25 +10,22 @@
           <div class="card-body">
             <h3>${p.name}</h3>
             <div class="price">₦${p.price}</div>
-            <button>
+            <button class="js-add-to-cart" 
+            data-product-id="${p.id}"
+            >Add to Cart
+            </button>
           </div>
         </div>
         `;
-       
-    });
+      });
     
   
-    document.querySelector(".js-products-menu")
-    innerHTML = products;
+    document.querySelector(".js-product-menu")
+    products.innerHTML = products;
 
-  document.querySelectorAll(".js-add-to-cart")
-   .forEach((button) =>{
-     button.addEventListener(`click`, () => {
-       const productId = button.dataset.
-       productsId;
-       
-       
-       let existingItem;
+
+   function addToCart(productId) {
+    let existingItem;
 
        cart.forEach((item) => {
         if (productId === item.productId) {
@@ -44,7 +41,9 @@
         quantity: 1
        });
       }
+    }
 
+    function updateCartQuantity () {
       let cartQuantity = 0;
 
       cart.forEach((item) => {
@@ -53,6 +52,19 @@
 
       document.querySelector(`.js-cart-quantity`)
       .innerHTML = cartQuantity;
+    }
+
+       document.querySelectorAll(".js-add-to-cart") 
+       .forEach((button) =>{
+     button.addEventListener(`click`, () => {
+       const productId = button.dataset.
+       productId;
+       addToCart(productId);
+       updateCartQuantity();
+        
+       
+
+
        });
     });
 
