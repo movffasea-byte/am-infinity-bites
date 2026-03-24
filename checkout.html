@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>  
+  <head>
+    <meta charset="UTF-8">
+    <title>Checkout - A&M Infinity Bites</title>
+    
+ <link rel="icon" href="images/unnamed111.jpg" type="image/x-icon">
+
+    <link rel="stylesheet" href="stylesheet/checkout.css">
+  </head>
+  <body>
+   <header>
+  <h1>A&M Infinity Bites</h1>
+  <p>Fresh Fruit Salad • Parfaits • Healthy Treats</p>
+</header>
+
+<nav>
+  <a onclick="scrollToSection('menu')">Menu</a>
+  <a onclick="scrollToSection('about')">About</a>
+  <a onclick="scrollToSection('contact')">Contact</a>
+</nav>
+
+<div class="hero">
+  <h2>Healthy • Tasty • Sweet</h2>
+</div>
+
+
+<h3>Order Review<span class="order-count">0</span></h3>
+<div id="cartItems"></div>
+<div id="totalPrice"></div>
+<div id="cartContainer"></div>
+<div class="checkout-grid">
+
+   <div id="checkoutForm">
+  <h3>Enter Your Details</h3>
+  <form id="orderForm">
+    <label for="name">Name:</label><br>
+    <input type="text" id="name" name="name" required><br><br>
+    
+    <label for="address">Address:</label><br>
+    <textarea id="address" name="address" required></textarea><br><br>
+    
+    <label for="phone">Phone Number:</label><br>
+    <input type="tel" id="phone" name="phone" required><br><br>
+    
+    <button type="submit">Place Order</button>
+  </form>
+</div>
+</div>
+
+    <div id="confirmationMessage">
+      Thank you for your order! 
+      We will contact you shortly to confirm the details.
+    </div>
+
+</div>
+
+ 
+
+    <script type="module" src="script/checkout.js"></script>
+  </body>
+</html>
