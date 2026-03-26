@@ -1,0 +1,94 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #ff7f50, #ffa502);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  background: white;
+  padding: 30px;
+  width: 350px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.button-box {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.button-box button {
+  width: 48%;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  background: #ffa502;
+  color: white;
+  border-radius: 5px;
+}
+
+.form {
+  display: none;
+
+}
+
+.form.active {
+  display: flex;
+  flex-direction: column;
+}
+
+.form h2 {
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.form input {
+  margin-bottom: 15px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.form button {
+  padding: 10px;
+  border: none;
+  background: #ff7f50;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.checkboxx {
+margin-top: 10px; 
+}
+
+.remember {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.remember input {
+  margin-right: 5px;
+}
+
+p {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.linktohomepage{
+display: grid;
+text-decoration: none;
+}
