@@ -1,5 +1,8 @@
 import { products } from '../data/products.js';
-import {  increaseQty, decreaseQty, removeItem } from '../data/cart.js';
+import { increaseQty, decreaseQty, removeItem } from '../data/cart.js';
+import { displayCart } from './displaycart.js';
+
+
 
 let container = document.getElementById("cartItems");
  
@@ -30,13 +33,14 @@ let container = document.getElementById("cartItems");
       <div class="price">₦${product.price}</div>
 
       <div class="quantity-controls">
-        <button class="js-decrease" 
+        <button class="decrease-quantity" 
         data-product-id="${product.id}">−</button>
         <span>${cartItem.quantity}</span>
-        <button class="js-increase" 
+        <button class="increase-quantity" 
         data-product-id="${product.id}">+</button>
       </div>
-     <button class="js-remove" data-product-id="${product.id}"
+     <button class="remove" 
+     data-product-id="${product.id}"
       class="remove-btn">
         Remove
       </button>
@@ -57,7 +61,10 @@ let container = document.getElementById("cartItems");
   document.getElementById("totalPrice").textContent = `Total: ₦${total}`;
   document.querySelector('.order-count').textContent = cartItems.length;
 
-// BUTTON EVENTS
+/*// BUTTON EVENTS
+
+
+
 document.addEventListener("click", (e) => {
 
   if (e.target.classList.contains("js-increase")) {
@@ -71,12 +78,83 @@ document.addEventListener("click", (e) => {
   }
 
   if (e.target.classList.contains("js-remove")) {
-    removeItem(e.target.dataset.id);
-    location.reload();
+    removeItem(Number(e.target.dataset.id));
+    
   }
 
 });
+   */
+  /*
+  document.querySelector(".cart-container").addEventListener("click", (e))
+  let id = Number(e.target.dataset.id);
+
+  if (e.target.classList.contains(".js-increase")) {
+    increaseQty(id);
     
+  
+  }
+
+  if (e.target.classList.contains(".js-decrease")) {
+    decreaseQty(id);
+    
+  
+  }
+
+  if (e.target.classList.contains(".js-remove")) {
+    removeItem(id);
+  
+    
+ }
+//load cart on page start
+displayCart("cart");
+*/
+/*
+  
+  document.querySelector(".js-decrease")
+  button.forEach((button) => {
+    button.addEventListener("click", () => {
+      const productId = Number(button.dataset.productId)
+      console.log('decrease');
+    });
+  });
+  
+  document.querySelectorAll(".js-increase")
+  button.forEach((button) => {
+  button.addEventListener("click", () => {
+    const productId = Number(button.dataset.productId);
+    console.log('increase');
+  });
+});
+ 
+    document.querySelectorAll(".js-remove")
+    button.forEach((button) => {
+      button.addEventListener("click", () => {
+        console.log('remove');
+      });
+    });
+    */
+
+
+document.querySelector("button").addEventListener("click", (e) => {
+  const id = Number(e.target.dataset.id);
+
+  if (e.target.classList.contains("js-increase")) {
+    increaseQty(id);
+  }
+
+  if (e.target.classList.contains("js-decrease")) {
+    decreaseQty(id);
+  }
+
+  if (e.target.classList.contains("js-remove")) {
+    removeItem(id);
+
+  }
+
+  //load cart on page start
+ displayCart("cart");
+});
+ 
 document.getElementById("orderForm").addEventListener("submit", function(e) {
   e.preventDefault();
 
@@ -89,7 +167,3 @@ document.getElementById("orderForm").addEventListener("submit", function(e) {
   // Clear cart after order
   localStorage.removeItem("cart");
 });
-
-    
-    
-
