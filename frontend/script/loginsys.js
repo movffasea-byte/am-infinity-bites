@@ -9,7 +9,7 @@ const loginMessage = document.getElementById("loginMessage");
 const registerMessage = document.getElementById("registerMessage");
 
 // Toggle Forms
-loginBtn.addEventListener = ("click", function ()  {
+loginBtn.addEventListener("click", function ()  {
   loginForm.classList.add("active");
   registerForm.classList.remove("active");
 });

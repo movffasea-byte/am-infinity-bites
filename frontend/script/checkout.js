@@ -108,34 +108,39 @@ document.addEventListener("click", (e) => {
 //load cart on page start
 displayCart("cart");
 */
-/*
+
   
-  document.querySelector(".js-decrease")
-  button.forEach((button) => {
-    button.addEventListener("click", () => {
-      const productId = Number(button.dataset.productId)
-      console.log('decrease');
+  document.querySelector('.js-decrease')
+  .forEach((button) => {
+    button.addEventListener('click', () => {
+      const productId = button.dataset.productId;
+      decreaseQty(productId)
+      console.log(cart);
     });
   });
   
-  document.querySelectorAll(".js-increase")
-  button.forEach((button) => {
-  button.addEventListener("click", () => {
-    const productId = Number(button.dataset.productId);
-    console.log('increase');
+  document.querySelectorAll('.js-increase')
+  .forEach((button) => {
+  button.addEventListener('click', () => {
+    const productId = button.dataset.productId;
+    increaseQty(productId)
+    console.log(cart);
   });
 });
  
-    document.querySelectorAll(".js-remove")
-    button.forEach((button) => {
-      button.addEventListener("click", () => {
-        console.log('remove');
+    document.querySelectorAll('.js-remove')
+    .forEach((button) => {
+      button.addEventListener('click', () => {
+        const productid = button.dataset.product.Id;
+        removeItem(productid)
+        console.log(cart);
       });
     });
-    */
+    
 
-
-document.querySelector("button").addEventListener("click", (e) => {
+/*
+document.querySelector("button")
+.addEventListener("click", (e) => {
   const id = Number(e.target.dataset.id);
 
   if (e.target.classList.contains("js-increase")) {
@@ -154,7 +159,7 @@ document.querySelector("button").addEventListener("click", (e) => {
   //load cart on page start
  displayCart("cart");
 });
- 
+ */
 document.getElementById("orderForm").addEventListener("submit", function(e) {
   e.preventDefault();
 

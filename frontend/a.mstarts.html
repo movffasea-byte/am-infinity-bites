@@ -13,13 +13,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link rel="stylesheet" href="stylesheet/a.mstarts.css">
+
+
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 
 <body>
 
-<header>
-  <h1>A&M Infinity Bites</h1>
+<header class="main-header">
+  <div class="left-header">
+    <a href="a.mstarts.html">
+      <img class="logo-image" src="logo/unnamed111.jpg">
+  </div>
+       </a>
+  <div class="middle-header">
+ <h1>A&M Infinity Bites</h1>
   <p>Fresh Fruit Salad • Parfaits • Healthy Treats</p>
+  </div>
+  <a></a>
+ <div class="right-header" id="accountBox">
+  <div class="account-trigger" id="accountBtn">
+    <img class="right-side-img" src="images/ab2.jpg" alt="">
+    <span class="my-acc" id="accountName">My Account</span>
+  </div>
+
+  <div class="dropdown" id="dropdownMenu">
+    <ul>
+      <li id="profileBtn">👤 Profile</li>
+      <li id="ordersBtn">📦 Past Orders</li>
+      <li class="divider"></li>
+      <a href="loginsys.html"> <li id="logoutBtn" class="logout">🚪 Logout</li>
+      </a>
+    </ul>
+  </div>
+</div>
 </header>
 
 <nav>
@@ -65,7 +92,13 @@
   © 2026 A&M Infinity Bites — All rights reserved
 </footer>
 
-<script type="module" src="script/a.mstarts.js"></script>
+
+
+<script type="module" src="script/a.mstarts.js">
+  (function(){
+    emailjs.init("swaemQST52V7NvjYp"); 
+  })();
+</script>
 
 </body>
 </html>
