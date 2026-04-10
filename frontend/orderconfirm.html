@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Confirmation | A&M Infinity Bites</title>
+    <link rel="stylesheet" href="stylesheet/orderconfirm.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Order Confirmation</h1>
+
+        <div class="order-summary">
+            <h2>Order Summary</h2>
+
+            <!-- Dynamic cart items load here -->
+            <div id="orderItems"></div>
+
+            <div class="total-row">
+                <strong>Total Amount:</strong>
+                <strong>₦<span id="totalAmount">0</span></strong>
+            </div>
+        </div>
+
+        <div class="payment-section">
+            <h2>Select Mode of Payment</h2>
+
+            <label>
+                <input type="radio" name="payment" value="paystack" checked>
+                Paystack (Card, Transfer, USSD)
+            </label>
+
+            <label>
+                <input type="radio" name="payment" value="bank">
+                Direct Bank Transfer
+            </label>
+
+            <label>
+                <input type="radio" name="payment" value="cash">
+                Cash on Delivery
+            </label>
+
+            <div id="bankDetails" class="hidden">
+                <p><strong>Bank:</strong> Your Bank Name</p>
+                <p><strong>Account Name:</strong> A&M Infinity Bites</p>
+                <p><strong>Account Number:</strong> 0000000000</p>
+            </div>
+
+            <button id="confirmBtn">Confirm & Pay</button>
+        </div>
+
+        <div id="successMessage" class="hidden success"></div>
+    </div>
+
+    <script src="script/orderconfirm.js"></script>
+</body>
+</html>
