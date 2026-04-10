@@ -81,13 +81,17 @@ app.post('/payment/initialize', async (req, res) => {
 
     const response = await axios.post(
       'https://api.paystack.co/transaction/initialize',
-      { email, amount: amount * 100, currency: 'NGN' },
-      { headers: { Authorization: `Bearer ${PAYSTACK_SECRET}`, 'Content-Type': 'application/json' } }
+      { email, 
+        amount: Math.round(amount * 100), // Convert to kobo and round to nearest integer   
+        currency: 'NGN',
+        callback_url: 'http://127.0.0.1:5500/frontend/payment-success.html' //redirect after payment
+      },
+      { headers: { Authorization: `Bearer ${PAYSTACK_SECRET}` } }
     );
 
     res.json(response.data);
   } catch (error) {
-    console.error(error);
+    console.error(error.response?.data || error.message);
     res.status(500).json({ error: 'Payment initialization failed' });
   }
 
