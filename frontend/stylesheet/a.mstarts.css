@@ -156,6 +156,94 @@
       border-radius: 10px;
     }
 
+    .category-header {
+      width: 100%;
+      padding: 20px 0 10px;
+      border-bottom: 2px solid #e8b84b;
+      margin-bottom: 16px;
+    }
+
+  .category-header {
+    width: 100%;
+    padding: 20px 0 10px;
+  border-bottom: 2px solid #e8b84b;
+    margin-bottom: 16px;
+    margin-top: 32px;
+  }
+
+  .category-header h2 {
+  font-size: 1.4rem;
+  color: #333;
+  text-align: center;
+}
+
+    .category-row {
+      display: flex;
+      flex-direction:row;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 40px;
+      width: 100%;
+    }
+
+   .product-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex:1 1 200px;
+      width: 200px;
+      background: #fff;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .product-card h3 {
+      font-size: 1rem;
+      margin-bottom: 6px;
+    }
+
+    .product-card .price {
+      font-weight: bold;
+      color:linear-gradient(90deg, #ff7f50, #ffa502);
+      margin-bottom: 6px;
+    }
+
+    .product-card .desc {
+      font-size: 0.8rem;
+      color: rgb(3, 0, 0)k;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .product-card button {
+      width: 100%;
+      padding: 8px;
+      background:linear-gradient(90deg, #ff7f50, #ffa502);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .product-card button:hover {
+      background: #d4a030;
+    }
+
+    #cart-container {
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      width:100%;
+    }
     section {
       padding: 50px 20px;
       max-width: 1100px;
@@ -171,7 +259,7 @@
 
     .products {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr,1fr,1fr));
       gap: 25px;
     }
 
@@ -241,7 +329,16 @@
     cursor: pointer;
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     font-weight: bold;
+    z-index:999;
+    transition: all 0.3s;
+
   }
+  .cart-box:hover {
+    background: #ff5722;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    transform: translateY(-2px);
+  }
+
     footer {
       background: #333;
       color: white;
