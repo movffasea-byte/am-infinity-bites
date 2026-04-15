@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  
+  <title>A&M Infinity Bites | Fresh Fruits Nigeria</title>
+
+  <link rel="icon" href="images/unnamed111.jpg" type="image/x-icon">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="stylesheet/loginsys.css" />
+</head>
+<body>
+
+  <!-- HERO SECTION -->
+  <div class="hero">
+    <div class="hero-pattern"></div>
+    <nav class="nav">
+      <div class="logo">A&M Infinity Bites</div>
+      <div class="nav-tag">100% Fresh</div>
+    </nav>
+    <div class="hero-content">
+      <div class="big-text">Eat Fresh.<br/><span>Live Better.</span></div>
+      <div class="fruits-row">
+        <div class="fruit-pill">Parfaits</div>
+        <div class="fruit-pill">Fruit Salads</div>
+        <div class="fruit-pill">Fresh Juices</div>
+        <div class="fruit-pill">Yogurt</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BODY SECTION -->
+  <div class="body-section">
+
+    <!-- BENEFITS -->
+    <div class="benefits-card">
+      <div class="benefit-title">Why choose us</div>
+      <div class="benefit-item">
+        <div class="benefit-num">01</div>
+        <div class="benefit-text">
+          <strong>100% Natural Ingredients</strong>
+          No preservatives, no artificial flavours — pure goodness every bite
+        </div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-num">02</div>
+        <div class="benefit-text">
+          <strong>Rich in Vitamins</strong>
+          Oranges, pineapples & watermelons packed with immune-boosting nutrients
+        </div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-num">03</div>
+        <div class="benefit-text">
+          <strong>Freshly Prepared Daily</strong>
+          Every order made fresh — delivered straight to your door
+        </div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-num">04</div>
+        <div class="benefit-text">
+          <strong>Supports Healthy Living</strong>
+          Fruits reduce risk of chronic disease and keep your energy levels high
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM CARD -->
+    <div class="form-card">
+
+      <!-- TABS -->
+      <div class="tabs">
+        <button class="tab active" id="loginTab">Login</button>
+        <button class="tab" id="registerTab">Register</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <div id="loginForm">
+        <div class="form-title">Welcome back</div>
+        <div class="form-sub">Sign in to place your order</div>
+
+        <div class="input-wrap">
+          <label class="input-label">Email</label>
+          <input class="input-field" type="email" id="loginEmail" placeholder="you@email.com" />
+        </div>
+
+        <div class="input-wrap">
+          <label class="input-label">Password</label>
+          <div class="password-wrap">
+            <input class="input-field" type="password" id="loginPassword" placeholder="••••••••" />
+            <button class="eye-btn" id="toggleLoginPassword" type="button">👁</button>
+          </div>
+        </div>
+
+        <div class="remember-row">
+          <label class="remember-label">
+            <input type="checkbox" id="rememberMe" />
+            Remember me
+          </label>
+        </div>
+
+        <button class="btn" id="loginBtn">Login →</button>
+        <div class="form-msg" id="loginMessage"></div>
+        <div class="switch-text">No account? <a href="#" id="goToRegister">Create one</a></div>
+      </div>
+
+      <!-- REGISTER FORM -->
+      <div id="registerForm" style="display:none;">
+        <div class="form-title">Join us</div>
+        <div class="form-sub">Create your account today</div>
+
+        <div class="input-wrap">
+          <label class="input-label">Full Name</label>
+          <input class="input-field" type="text" id="registerName" placeholder="Your name" />
+        </div>
+
+        <div class="input-wrap">
+          <label class="input-label">Email</label>
+          <input class="input-field" type="email" id="registerEmail" placeholder="you@email.com" />
+        </div>
+
+        <div class="input-wrap">
+          <label class="input-label">Password</label>
+          <div class="password-wrap">
+            <input class="input-field" type="password" id="registerPassword" placeholder="••••••••" />
+            <button class="eye-btn" id="toggleRegisterPassword" type="button">👁</button>
+          </div>
+        </div>
+
+        <button class="btn" id="registerBtn">Send Verification Code →</button>
+        <div class="form-msg" id="registerMessage"></div>
+        <div class="switch-text">Already have an account? <a href="#" id="goToLogin">Login</a></div>
+      </div>
+
+      <!-- OTP FORM -->
+      <div id="otpForm" style="display:none;">
+        <div class="form-title">Verify Email</div>
+        <div class="form-sub" id="otpSubText">Enter the 6-digit code sent to your email</div>
+        <div class="otp-boxes" id="otpBoxes">
+          <input class="otp-input" type="text" maxlength="1" />
+          <input class="otp-input" type="text" maxlength="1" />
+          <input class="otp-input" type="text" maxlength="1" />
+          <input class="otp-input" type="text" maxlength="1" />
+          <input class="otp-input" type="text" maxlength="1" />
+          <input class="otp-input" type="text" maxlength="1" />
+        </div>
+        <div class="resend-row">
+          <span id="countdownText" class="countdown"></span>
+          <a href="#" id="resendOtp" class="resend-link" style="display:none;">Resend code</a>
+        </div>
+        <button class="btn" id="verifyOtpBtn">Verify & Create Account →</button>
+        <div class="form-msg" id="otpMessage"></div>
+        <div class="switch-text"><a href="#" id="backToRegister">← Back to register</a></div>
+      </div>
+
+    </div><!-- end form-card -->
+  </div><!-- end body-section -->
+
+  <script src="script/loginsys.js"></script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>  
+  <head>
+    <meta charset="UTF-8">
+    <title>Checkout - A&M Infinity Bites</title>
+    
+ <link rel="icon" href="images/unnamed111.jpg" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+
+    <link rel="stylesheet" href="stylesheet/checkout.css">
+    <link rel="stylesheet" href="stylesheet/auth-modal.css">
+    
+  </head>
+  <body>
+   <header class="main-header">
+  <div class="left-header">
+    <a href="a.mstarts.html">
+      <img class="logo-image" src="logo/unnamed111.jpg">
+    </a>
+  </div>
+
+  <div class="middle-header">
+    <h1>A&M Infinity Bites</h1>
+    <p>Fresh Fruit Salad • Parfaits • Healthy Treats</p>
+  </div>
+
+  <div class="right-header" id="accountBox">
+    <a href="dashboard.html" class="account-trigger" id="accountBtn">
+      <span class="my-acc" id="accountName">Dashboard</span>
+    </a>
+  </div>
+</header>
+
+<nav>
+  <a onclick="scrollToSection('menu')">Menu</a>
+  <a onclick="scrollToSection('about')">About</a>
+  <a onclick="scrollToSection('contact')">Contact</a>
+</nav>
+
+<div class="hero">
+  <h2>Healthy • Tasty • Sweet</h2>
+</div>
+
+
+<h3>Order Review<span class="order-count">0</span></h3>
+<div id="cart-container">
+<div id="cartItems"></div>
+</div>
+<div id="totalPrice"></div>
+
+<div class="checkout-grid">
+
+   <div id="checkoutForm">
+  <h3>Enter Your Details</h3>
+  <form id="orderForm">
+    <label for="name">Name:</label><br>
+    <input type="text" id="name" name="name" required><br><br>
+    
+    <label for="address">Address:</label><br>
+    <textarea id="address" name="address" required></textarea><br><br>
+    
+    <label for="phone">Phone Number:</label><br>
+    <input type="tel" id="phone" name="phone" required><br><br>
+    <a href="orderconfirm.html">
+    <button type="submit" class="place-B" id="placeOrderBtn">Place Order</button>
+    </a>
+  </form>
+</div>
+</div>
+
+    <div id="confirmationMessage">
+      Thank you for your order! 
+      We will contact you shortly to confirm the details.
+    </div>
+
+</div>
+
+ <footer>
+  © 2026 A&M Infinity Bites — All rights reserved
+</footer>
+
+
+    <script type="module" src="script/checkout.js"></script>
+    <script src="script/header.js"></script>
+  </body>
+</html>

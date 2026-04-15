@@ -1,0 +1,473 @@
+:root {
+  --orange: #ff6b2b;
+  --orange-dark: #e55520;
+  --orange-light: #ff8c55;
+  --text-dark: #1a1a1a;
+  --text-mid: #444;
+  --text-muted: #999;
+  --bg-white: #ffffff;
+  --bg-light: #fffdf7;
+  --border: #eeeeee;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family:  'Pacifico', cursive;
+}
+
+body {
+  background: var(--bg-light);
+  min-height: 100vh;
+}
+
+/* ===================== HERO ===================== */
+.hero {
+  background:  linear-gradient(90deg, #ff7f50, #ffa502);
+  padding: 32px 48px 90px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-pattern {
+  position: absolute;
+  inset: 0;
+  opacity: 0.07;
+  background-image: repeating-linear-gradient(
+    45deg,
+    #fff 0,
+    #fff 1px,
+    transparent 0,
+    transparent 50%
+  );
+  background-size: 12px 12px;
+  pointer-events: none;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  animation: fadeDown 0.6s ease both;
+}
+
+.logo {
+  font-size: 1.4rem;
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.nav-tag {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 0.72rem;
+  padding: 5px 14px;
+  border-radius: 20px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.hero-content {
+  margin-top: 32px;
+  position: relative;
+  z-index: 1;
+  animation: fadeUp 0.7s ease 0.1s both;
+}
+
+.big-text {
+  font-size: 3.6rem;
+  color: #fff;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -1.5px;
+}
+
+.big-text span {
+  color: #ffe0a0;
+}
+
+.fruits-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.fruit-pill {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 0.82rem;
+  padding: 7px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: background 0.2s;
+}
+
+.fruit-pill:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* ===================== BODY ===================== */
+.body-section {
+  padding: 0 48px 60px;
+  margin-top: -50px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: start;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: -50px;
+}
+
+/* ===================== BENEFITS ===================== */
+.benefits-card {
+  background: var(--bg-white);
+  border-radius: 18px;
+  padding: 32px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  animation: fadeUp 0.7s ease 0.2s both;
+}
+
+.benefit-title {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  color: var(--orange);
+  margin-bottom: 24px;
+  font-weight: 700;
+}
+
+.benefit-item {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 20px;
+  align-items: flex-start;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.benefit-item:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.benefit-num {
+  font-size: 1.6rem;
+  color: var(--orange);
+  font-weight: 800;
+  line-height: 1;
+  min-width: 32px;
+  opacity: 0.8;
+}
+
+.benefit-text {
+  font-size: 0.87rem;
+  color: var(--text-mid);
+  line-height: 1.6;
+  margin-left: 4px;
+}
+
+.benefit-text strong {
+  display: block;
+  color: var(--text-dark);
+  font-weight: 500;
+  margin-bottom: 3px;
+  font-size: 0.9rem;
+}
+
+/* ===================== FORM CARD ===================== */
+.form-card {
+  background: var(--bg-white);
+  border-radius: 18px;
+  padding: 32px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  animation: fadeUp 0.7s ease 0.3s both;
+}
+
+/* TABS */
+.tabs {
+  display: flex;
+  background: #f5f5f5;
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 28px;
+  gap: 4px;
+}
+
+.tab {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 400;
+}
+
+.tab.active {
+  background: var(--orange);
+  color: #fff;
+  font-weight: 500;
+}
+
+.tab:hover:not(.active) {
+  background: #ebebeb;
+  color: var(--text-dark);
+}
+
+/* FORM ELEMENTS */
+.form-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin-bottom: 4px;
+  letter-spacing: -0.5px;
+}
+
+.form-sub {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+.input-wrap {
+  margin-bottom: 16px;
+}
+
+.input-label {
+  display: block;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #aaa;
+  margin-bottom: 6px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-size: 0.92rem;
+  color: var(--text-dark);
+  outline: none;
+  transition: border-color 0.2s;
+  background: #fafafa;
+}
+
+.input-field:focus {
+  border-color: var(--orange);
+  background: #fff;
+}
+
+/* PASSWORD TOGGLE */
+.password-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.password-wrap .input-field {
+  padding-right: 48px;
+  width: 100%;
+  flex: 1;
+}
+
+.eye-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--text-muted);
+  padding: 4px;
+  line-height: 1;
+  transition: opacity 0.2s;
+  z-index: 2;
+}
+
+.eye-btn:hover { opacity: 0.7; }
+
+/* REMEMBER ME */
+.remember-row {
+  margin-bottom: 16px;
+}
+
+.remember-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--orange);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  transition: all 0.2s;
+  margin-top: 4px;
+}
+
+.btn:hover {
+  background: var(--orange-dark);
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* MESSAGES */
+.form-msg {
+  text-align: center;
+  font-size: 0.85rem;
+  margin-top: 10px;
+  min-height: 20px;
+  transition: all 0.2s;
+}
+
+.form-msg.success { color: #4caf7d; }
+.form-msg.error { color: #e05252; }
+
+.switch-text {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.switch-text a {
+  color: var(--orange);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.switch-text a:hover {
+  text-decoration: underline;
+}
+/* ===================== OTP ===================== */
+.otp-boxes {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 24px 0;
+}
+ 
+.otp-input {
+  width: 48px;
+  height: 56px;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 700;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.2s;
+  color: var(--text-dark);
+  background: #fafafa;
+}
+ 
+.otp-input:focus {
+  border-color: var(--orange);
+  background: #fff;
+}
+ 
+.otp-input.filled {
+  border-color: var(--orange);
+  background: #fff7f3;
+}
+ 
+.resend-row {
+  text-align: center;
+  margin-bottom: 16px;
+}
+ 
+.countdown {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+ 
+.resend-link {
+  font-size: 0.82rem;
+  color: var(--orange);
+  text-decoration: none;
+  font-weight: 500;
+}
+ 
+.resend-link:hover { text-decoration: underline; }
+
+/* ===================== ANIMATIONS ===================== */
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 768px) {
+  .hero {
+    padding: 24px 24px 80px;
+  }
+
+  .big-text {
+    font-size: 2.4rem;
+  }
+
+  .body-section {
+    grid-template-columns: 1fr;
+    padding: 0 24px 40px;
+  }
+
+  .benefits-card,
+  .form-card {
+    padding: 24px;
+  }
+  .otp-input {
+     width: 40px; 
+     height: 48px; 
+     font-size: 1.2rem; }
+}
+
+#registerForm,
+#loginForm,
+#otpForm {
+  width: 100%;
+}
+
+.form-card > div {
+  width: 100%;
+}

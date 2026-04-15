@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>A&M Infinity Bites</title>
+
+  <link rel="icon" href="images/unnamed111.jpg" type="image/x-icon">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="stylesheet/a.mstarts.css">
+  <link rel="stylesheet" href="stylesheet/auth-modal.css">
+</head>
+<body>
+
+<header class="main-header">
+  <div class="left-header">
+    <a href="a.mstarts.html">
+      <img class="logo-image" src="logo/unnamed111.jpg">
+    </a>
+  </div>
+       
+  <div class="middle-header">
+ <h1>A&M Infinity Bites</h1>
+  <p>Fresh Fruit Salad • Parfaits • Healthy Treats</p>
+  </div>
+  
+ <div class="right-header" id="accountBox">
+    <a href="dashboard.html" class="account-trigger" id="accountBtn">
+      <span class="my-acc" id="accountName">Dashboard</span>
+    </a>
+  </div>
+</header>
+
+<nav>
+  <a onclick="scrollToSection('menu')">Menu</a>
+  <a onclick="scrollToSection('about')">About</a>
+  <a onclick="scrollToSection('contact')">Contact</a>
+</nav>
+
+<div class="hero">
+  <h2>Healthy • Tasty • Sweet</h2>
+</div>
+
+<section id="menu">
+  <h2 class="section-title">Our Menu</h2>
+  <div class="products js-product-menu" id="cart-container"></div>
+</section>
+
+
+<section id="about">
+  <h2 class="section-title">About Us</h2>
+  <div class="about">
+    We prepare fresh fruit salad parfaits and healthy snack bowls daily using
+    quality ingredients. Perfect for breakfast, events, fitness meals, and
+    sweet healthy cravings.
+  </div>
+</section>
+
+<section id="contact">
+  <h2 class="section-title">Contact & Orders</h2>
+  <div class="contact">
+    <a href="https://wa.me/2348072683326" target="_blank">WhatsApp: +2348072683326</a><br>
+    <a href="https://www.instagram.com/a.m_infinity_bites" target="_blank">Instagram</a><br>
+    <a href="https://www.tiktok.com/@am.infinity.bites" target="_blank">Tiktok</a><br>
+    Open: Mon–Sat<br>
+    Time: 8am–6pm
+  </div>
+</section>
+
+<a href="checkout.html" class="cart-box">
+  Cart (<span class="js-cart-quantity" id="cartCount">0</span>)
+</a>
+
+<footer>
+  © 2026 A&M Infinity Bites — All rights reserved
+</footer>
+
+<script src="script/header.js"></script>
+
+<script type="module" src="script/a.mstarts.js">
+  (function(){
+    emailjs.init("swaemQST52V7NvjYp"); 
+  })();
+</script>
+
+
+
+</body>
+</html>

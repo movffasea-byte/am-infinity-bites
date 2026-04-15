@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Confirmation | A&M Infinity Bites</title>
+
+    <link rel="icon" href="images/unnamed111.jpg" type="image/x-icon">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="stylesheet/orderconfirm.css">
+    <link rel="stylesheet" href="stylesheet/auth-modal.css">
+</head>
+<body>
+
+    <header class="main-header">
+  <div class="left-header">
+    <a href="a.mstarts.html">
+      <img class="logo-image" src="logo/unnamed111.jpg">
+  </div>
+       </a>
+  <div class="middle-header">
+ <h1>A&M Infinity Bites</h1>
+  <p>Fresh Fruit Salad • Parfaits • Healthy Treats</p>
+  </div>
+  
+  <div class="right-header" id="accountBox">
+    <a href="dashboard.html" class="account-trigger" id="accountBtn">
+      <span class="my-acc" id="accountName">Dashboard</span>
+    </a>
+  </div>
+</header>
+
+<nav>
+  <a onclick="scrollToSection('menu')">Menu</a>
+  <a onclick="scrollToSection('about')">About</a>
+  <a onclick="scrollToSection('contact')">Contact</a>
+</nav>
+
+    <div class="container">
+        <h1>Order Confirmation</h1>
+
+        <div class="order-summary">
+            <h2>Order Summary</h2>
+
+            <!-- Dynamic cart items load here -->
+            <div id="orderItems"></div>
+
+            <div class="total-row">
+                <strong>Total Amount:</strong>
+                <strong>₦<span id="totalAmount">0</span></strong>
+            </div>
+        </div>
+
+        <div class="payment-section">
+            <h2>Select Mode of Payment</h2>
+
+            <label>
+                <input type="radio" name="payment" value="paystack" checked>
+                Paystack (Card, Transfer, USSD)
+            </label>
+
+            <label>
+                <input type="radio" name="payment" value="bank">
+                Direct Bank Transfer
+            </label>
+
+            <label>
+                <input type="radio" name="payment" value="cash">
+                Cash on Delivery
+            </label>
+
+            <div id="bankDetails" class="hidden">
+                <p><strong>Bank:</strong> Your Bank Name</p>
+                <p><strong>Account Name:</strong> A&M Infinity Bites</p>
+                <p><strong>Account Number:</strong> 0000000000</p>
+            </div>
+
+            <button id="confirmBtn">Confirm & Pay</button>
+        </div>
+
+        <div id="successMessage" class="hidden success"></div>
+    </div>
+
+
+    <footer>
+  © 2026 A&M Infinity Bites — All rights reserved
+</footer>
+
+
+    <script src="script/header.js"></script>
+    <script src="script/orderconfirm.js"></script>
+</body>
+</html>

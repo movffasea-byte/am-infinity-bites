@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Dashboard — A&M Infinity Bites</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="stylesheet/dashboard.css" />
+  <link rel="stylesheet" href="stylesheet/auth-modal.css">
+</head>
+<body>
+ 
+<header>
+  <div class="logo">
+    A&M Infinity Bites
+    <span>My Dashboard</span>
+  </div>
+  <div class="header-right">
+    <span class="header-name" id="headerName"></span>
+    <a href="a.mstarts.html" class="btn-back">← Back to Store</a>
+    <a href="loginsys.html" class="btn-logout" id="logoutBtn">Logout</a>
+  </div>
+</header>
+ 
+<div class="dashboard-layout">
+ 
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="user-card">
+      <div class="user-avatar">🍓</div>
+      <div class="user-card-name" id="sidebarName">Loading...</div>
+      <div class="user-card-email" id="sidebarEmail"></div>
+    </div>
+ 
+    <button class="nav-btn active" data-section="overview">
+      <span class="icon">📊</span> Overview
+    </button>
+    <button class="nav-btn" data-section="orders">
+      <span class="icon">📦</span> My Orders
+    </button>
+    <button class="nav-btn" data-section="profile">
+      <span class="icon">👤</span> Edit Profile
+    </button>
+    <button class="nav-btn" data-section="address">
+      <span class="icon">📍</span> Delivery Address
+    </button>
+  </aside>
+ 
+  <!-- MAIN -->
+  <main class="main-content">
+ 
+    <!-- OVERVIEW -->
+    <div class="section active" id="section-overview">
+      <div class="section-title" id="welcomeName">Welcome back!</div>
+      <div class="section-subtitle">Here's a summary of your activity</div>
+ 
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-number" id="statTotal">0</div>
+          <div class="stat-label">Total Orders</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="statPaid">0</div>
+          <div class="stat-label">Completed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="statSpent">₦0</div>
+          <div class="stat-label">Total Spent</div>
+        </div>
+      </div>
+ 
+      <!-- Recent Orders Preview -->
+      <div class="card">
+        <h3 style="font-family: 'Playfair Display', serif; margin-bottom: 16px;">Recent Orders</h3>
+        <div id="recentOrdersList"><div class="loading">Loading orders...</div></div>
+      </div>
+    </div>
+ 
+    <!-- MY ORDERS -->
+    <div class="section" id="section-orders">
+      <div class="section-title">My Orders</div>
+      <div class="section-subtitle">Track and view all your orders</div>
+      <div id="allOrdersList"><div class="loading">Loading orders...</div></div>
+    </div>
+ 
+    <!-- EDIT PROFILE -->
+    <div class="section" id="section-profile">
+      <div class="section-title">Edit Profile</div>
+      <div class="section-subtitle">Update your personal information</div>
+ 
+      <div class="card">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="profileName" placeholder="Your name" />
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="profileEmail" disabled />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="profilePhone" placeholder="e.g. 08012345678" />
+        </div>
+        <button class="btn-save" id="saveProfileBtn">Save Changes</button>
+        <div class="msg" id="profileMsg"></div>
+      </div>
+    </div>
+ 
+    <!-- DELIVERY ADDRESS -->
+    <div class="section" id="section-address">
+      <div class="section-title">Delivery Address</div>
+      <div class="section-subtitle">Your saved delivery address — used automatically at checkout</div>
+ 
+      <div class="card">
+        <div class="form-group">
+          <label>Full Delivery Address</label>
+          <textarea id="profileAddress" rows="4" placeholder="e.g. 12 Mango Street, Wuse 2, Abuja"></textarea>
+        </div>
+        <button class="btn-save" id="saveAddressBtn">Save Address</button>
+        <div class="msg" id="addressMsg"></div>
+      </div>
+    </div>
+ 
+  </main>
+</div>
+ 
+<script src="script/dashboard.js"></script>
+</body>
+</html>
