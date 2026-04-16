@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const SECRET_KEY = 'fruitwebsite_secret_123';
+const SECRET_KEY = process.env.JWT_SECRET || "fallback_secret";
 
 function verifyToken(req, res, next) {
   const authHeader = req.headers['authorization'];
@@ -9,7 +9,6 @@ function verifyToken(req, res, next) {
     return res.status(401).json({ message: 'Access denied! Please login first.' });
   }
 
-  // Strip "Bearer " from token
   const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : authHeader;
 
   try {
