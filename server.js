@@ -277,9 +277,11 @@ app.get('/payment/verify/:reference', async (req, res) => {
 // START SERVER
 // =====================
 initDB().then(() => {
-  app.listen(PORT, () => {
+  const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on port ${PORT}`);
   });
+  server.keepAliveTimeout = 120000;
+  server.headersTimeout = 120000;
 }).catch(err => {
   console.error('Failed to initialize database:', err);
   process.exit(1);
