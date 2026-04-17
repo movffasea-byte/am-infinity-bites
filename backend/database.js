@@ -11,12 +11,12 @@ async function initDB() {
     await client.query(`
       CREATE TABLE IF NOT EXISTS products (
         id SERIAL PRIMARY KEY,
-        name TEXT NOT NULL
-        price REAL NOT NULL,
+        name TEXT NOT NULL,
+        price DOUBLE PRECISION NOT NULL,
         description TEXT,
         image TEXT,
         category TEXT,
-        archived INTEGER DEFAULT 0
+        archived SMALLINT DEFAULT 0
       )
     `);
 
@@ -28,12 +28,12 @@ async function initDB() {
         phone TEXT,
         address TEXT,
         items TEXT,
-        amount REAL,
+        amount NUMERIC,
         payment_method TEXT,
         reference TEXT,
         status TEXT,
         created_at TEXT,
-        archived INTEGER DEFAULT 0
+        archived SMALLINT DEFAULT 0
       )
     `);
 
@@ -53,10 +53,10 @@ async function initDB() {
       CREATE TABLE IF NOT EXISTS addons (
         id SERIAL PRIMARY KEY,
         name TEXT NOT NULL,
-        price REAL NOT NULL
+        price NUMERIC NOT NULL
       )
     `);
-
+    
     // Seed addons if empty
     const { rows } = await client.query('SELECT COUNT(*) as count FROM addons');
     if (parseInt(rows[0].count) === 0) {
