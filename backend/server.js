@@ -43,7 +43,7 @@ app.get('/', (req, res) => {
 app.get('/products', async (req, res) => {
   try {
     const pool = getPool();
-    const result = await pool.query('SELECT * FROM products WHERE archived = 0 ORDER BY id ASC');
+    const result = await pool.query('SELECT * FROM products ORDER BY id ASC');
     res.json(result.rows);
   } catch (err) {
     console.error(err);
