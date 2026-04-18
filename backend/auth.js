@@ -26,6 +26,26 @@ router.post('/signup', async (req, res) => {
       [name, email, hashedPassword, new Date().toISOString()]
     );
 
+    // ── Notify admin of new registration ──
+    try {
+      const transporter = require('./server').transporter;
+      await transporter.sendMail({
+        from: `"A&M Infinity Bites" <${process.env.EMAIL_USER}>`,
+        to: process.env.EMAIL_USER,
+        subject: '🆕 New User Registered — A&M Infinity Bites',
+        html: `
+          <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 32px; background: #fffdf7; border-radius: 12px;">
+            <h2 style="color: #ff6b2b;">New User Registered!</h2>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Date:</strong> ${new Date().toLocaleString()}</p>
+          </div>
+        `
+      });
+    } catch (mailErr) {
+      console.error('Admin notification failed:', mailErr);
+    }
+
     res.json({ message: 'Account created successfully!' });
   } catch (err) {
     console.error('Signup error:', err);

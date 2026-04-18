@@ -19,8 +19,9 @@ const transporter = nodemailer.createTransport({
   auth: { user: EMAIL_USER, pass: EMAIL_PASS }
 });
 
-const otpStore = {};
+module.exports.transporter = transporter;
 
+const otpStore = {};
 // =====================
 // CORS — allow GitHub Pages frontend
 // =====================
