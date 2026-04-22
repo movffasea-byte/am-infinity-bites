@@ -3,9 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <title>Order Confirmation | A&M Infinity Bites</title>
+
+    <link rel="icon" href="images/unnamed111.jpg" type="image/x-icon">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="stylesheet/orderconfirm.css">
+    <link rel="stylesheet" href="stylesheet/auth-modal.css">
 </head>
 <body>
+
+    <header class="main-header">
+  <div class="left-header">
+    <a href="a.mstarts.html">
+      <img class="logo-image" src="logo/unnamed111.jpg">
+  </div>
+       </a>
+  <div class="middle-header">
+ <h1>A&M Infinity Bites</h1>
+  <p>Fresh Fruit Salad • Parfaits • Healthy Treats</p>
+  </div>
+  
+  <div class="right-header" id="accountBox">
+    <a href="dashboard.html" class="account-trigger" id="accountBtn">
+      <span class="my-acc" id="accountName">Dashboard</span>
+    </a>
+  </div>
+</header>
+
+<nav>
+  <a onclick="scrollToSection('menu')">Menu</a>
+  <a onclick="scrollToSection('about')">About</a>
+  <a onclick="scrollToSection('contact')">Contact</a>
+</nav>
 
     <div class="container">
         <h1>Order Confirmation</h1>
@@ -52,6 +84,13 @@
         <div id="successMessage" class="hidden success"></div>
     </div>
 
+
+    <footer>
+  © 2026 A&M Infinity Bites — All rights reserved
+</footer>
+
+
+    <script src="script/header.js"></script>
     <script src="script/orderconfirm.js"></script>
 </body>
 </html>

@@ -14,10 +14,10 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family:  'Pacifico', cursive;
 }
 
 body {
-  font-family:  'Pacifico', cursive;
   background: var(--bg-light);
   min-height: 100vh;
 }
@@ -55,7 +55,6 @@ body {
 }
 
 .logo {
-  font-family: 'Syne', sans-serif;
   font-size: 1.4rem;
   color: #fff;
   font-weight: 800;
@@ -81,7 +80,6 @@ body {
 }
 
 .big-text {
-  font-family: 'Syne', sans-serif;
   font-size: 3.6rem;
   color: #fff;
   font-weight: 800;
@@ -107,7 +105,6 @@ body {
   padding: 7px 16px;
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  font-family: 'DM Sans', sans-serif;
   transition: background 0.2s;
 }
 
@@ -139,7 +136,6 @@ body {
 }
 
 .benefit-title {
-  font-family: 'Syne', sans-serif;
   font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 2.5px;
@@ -164,7 +160,6 @@ body {
 }
 
 .benefit-num {
-  font-family:  'Pacifico', cursive;
   font-size: 1.6rem;
   color: var(--orange);
   font-weight: 800;
@@ -213,7 +208,6 @@ body {
   border: none;
   background: transparent;
   border-radius: 8px;
-  font-family: 'DM Sans', sans-serif;
   font-size: 0.9rem;
   color: var(--text-muted);
   cursor: pointer;
@@ -234,7 +228,6 @@ body {
 
 /* FORM ELEMENTS */
 .form-title {
-  font-family: 'Syne', sans-serif;
   font-size: 1.6rem;
   font-weight: 800;
   color: var(--text-dark);
@@ -266,7 +259,6 @@ body {
   padding: 12px 16px;
   border: 1.5px solid var(--border);
   border-radius: 10px;
-  font-family: 'DM Sans', sans-serif;
   font-size: 0.92rem;
   color: var(--text-dark);
   outline: none;
@@ -279,6 +271,39 @@ body {
   background: #fff;
 }
 
+/* PASSWORD TOGGLE */
+.password-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.password-wrap .input-field {
+  padding-right: 48px;
+  width: 100%;
+  flex: 1;
+}
+
+.eye-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--text-muted);
+  padding: 4px;
+  line-height: 1;
+  transition: opacity 0.2s;
+  z-index: 2;
+}
+
+.eye-btn:hover { opacity: 0.7; }
+
+/* REMEMBER ME */
 .remember-row {
   margin-bottom: 16px;
 }
@@ -299,7 +324,6 @@ body {
   color: #fff;
   border: none;
   border-radius: 10px;
-  font-family: 'Syne', sans-serif;
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
@@ -317,6 +341,13 @@ body {
   transform: translateY(0);
 }
 
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* MESSAGES */
 .form-msg {
   text-align: center;
   font-size: 0.85rem;
@@ -344,6 +375,56 @@ body {
 .switch-text a:hover {
   text-decoration: underline;
 }
+/* ===================== OTP ===================== */
+.otp-boxes {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 24px 0;
+}
+ 
+.otp-input {
+  width: 48px;
+  height: 56px;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 700;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.2s;
+  color: var(--text-dark);
+  background: #fafafa;
+}
+ 
+.otp-input:focus {
+  border-color: var(--orange);
+  background: #fff;
+}
+ 
+.otp-input.filled {
+  border-color: var(--orange);
+  background: #fff7f3;
+}
+ 
+.resend-row {
+  text-align: center;
+  margin-bottom: 16px;
+}
+ 
+.countdown {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+ 
+.resend-link {
+  font-size: 0.82rem;
+  color: var(--orange);
+  text-decoration: none;
+  font-weight: 500;
+}
+ 
+.resend-link:hover { text-decoration: underline; }
 
 /* ===================== ANIMATIONS ===================== */
 @keyframes fadeDown {
@@ -375,4 +456,18 @@ body {
   .form-card {
     padding: 24px;
   }
+  .otp-input {
+     width: 40px; 
+     height: 48px; 
+     font-size: 1.2rem; }
+}
+
+#registerForm,
+#loginForm,
+#otpForm {
+  width: 100%;
+}
+
+.form-card > div {
+  width: 100%;
 }

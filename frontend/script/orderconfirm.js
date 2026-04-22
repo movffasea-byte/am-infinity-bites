@@ -4,21 +4,23 @@ document.addEventListener("DOMContentLoaded", function () {
   const successMessage = document.getElementById("successMessage");
   const confirmBtn = document.getElementById("confirmBtn");
 
-  // =====================
-  // LOAD CART FROM STORAGE
-  // =====================
+  const API = 'http://localhost:3000';
+
+//LOAD CART FROM STORAGE
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   const orderItemsContainer = document.getElementById("orderItems");
   const totalAmountEl = document.getElementById("totalAmount");
+  const user = JSON.parse(localStorage.getItem("user"));
 
-  let orderTotal = 0; //declared at the top
+  console.log("User from storage:", user);
+  console.log("Email being sent:", user?.email || "customer@email.com");
+
+  let orderTotal = 0;
 
   if (cart.length === 0) {
     orderItemsContainer.innerHTML = "<p>Your cart is empty.</p>";
     confirmBtn.disabled = true;
   } else {
-    let total = 0;
-
     cart.forEach(item => {
       orderTotal += item.price * item.quantity;
 
@@ -32,7 +34,9 @@ document.addEventListener("DOMContentLoaded", function () {
       orderItemsContainer.appendChild(row);
     });
 
-    totalAmountEl.textContent = total.toLocaleString();
+    // ✅ Fixed: was using undeclared 'total' variable
+    totalAmountEl.textContent = orderTotal.toLocaleString();
+     console.log("Amount being sent:", orderTotal)
   }
 
   // =====================
@@ -50,7 +54,37 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // =====================
-  // INITIALIZE PAYSTACK
+  // SAVE ORDER TO DATABASE
+  // =====================
+  async function saveOrder(paymentMethod, reference, status) {
+    try {
+      const name = localStorage.getItem("customerName") || user?.name || "N/A";
+      const phone = localStorage.getItem("customerPhone") || "N/A";
+      const address = localStorage.getItem("customerAddress") || "N/A";
+      const email = user?.email || "customer@email.com";
+
+      await fetch(`${API}/orders`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          name,
+          phone,
+          address,
+          items: cart,
+          amount: orderTotal,
+          payment_method: paymentMethod,
+          reference: reference || "",
+          status
+        })
+      });
+    } catch (err) {
+      console.error("Order save error:", err);
+    }
+  }
+
+  // =====================
+  // INITIALIZE PAYMENT
   // =====================
   async function initializePayment() {
     const selectedPayment = document.querySelector('input[name="payment"]:checked');
@@ -61,47 +95,78 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const method = selectedPayment.value;
+    const email = user?.email || "customer@email.com";
 
-
-     if (method === "paystack") {
+    // PAYSTACK
+    if (method === "paystack") {
       try {
-        const user = JSON.parse(localStorage.getItem("user"));
-        const email = user?.email || "customer@email.com";
-     
- 
-        const response = await fetch("http://localhost:3000/payment/initialize", {
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = "Redirecting to Paystack...";
+
+
+console.log("Sending to Paystack:", { email, amount: orderTotal });
+
+        const response = await fetch(`${API}/payment/initialize`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: email,
-            amount: orderTotal // ✅ plain number, backend converts to kobo
-          })
+          body: JSON.stringify({ email, amount: orderTotal })
         });
 
         const data = await response.json();
+        console.log("Full Paystack response:", JSON.stringify(data));
 
         if (data.status === true && data.data.authorization_url) {
-
-          //save refrence before redirecting
+          await saveOrder("paystack", data.data.reference, "pending");
           localStorage.setItem("paymentReference", data.data.reference);
-          window.location.href = data.data.authorization_url;
+          
+          console.log("Redirecting to:", data.data.authorization_url);
+
+          window.location.replace(data.data.authorization_url);
         } else {
           alert("Failed to initialize payment. Please try again.");
+          confirmBtn.disabled = false;
+          confirmBtn.textContent = "Confirm & Pay";
         }
       } catch (err) {
         console.error("Payment error:", err);
         alert("Unable to connect to payment gateway.");
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = "Confirm & Pay";
       }
 
+    // BANK TRANSFER
     } else if (method === "bank") {
+      confirmBtn.disabled = true;
+      confirmBtn.textContent = "Saving order...";
+
+      await saveOrder("bank", "", "pending");
+
       successMessage.classList.remove("hidden");
       successMessage.textContent = "✅ Please complete your bank transfer. We will confirm your order shortly.";
-      localStorage.removeItem("cart");
 
-    } else if (method === "cash") {
-      successMessage.classList.remove("hidden");
-      successMessage.textContent = "✅ Order confirmed! Pay on delivery.";
       localStorage.removeItem("cart");
+      localStorage.removeItem("customerName");
+      localStorage.removeItem("customerPhone");
+      localStorage.removeItem("customerAddress");
+
+      confirmBtn.textContent = "Order Placed!";
+
+    // CASH ON DELIVERY
+    } else if (method === "cash") {
+      confirmBtn.disabled = true;
+      confirmBtn.textContent = "Saving order...";
+
+      await saveOrder("cash", "", "pending");
+
+      successMessage.classList.remove("hidden");
+      successMessage.textContent = "✅ Order confirmed! Pay on delivery. We will contact you shortly.";
+
+      localStorage.removeItem("cart");
+      localStorage.removeItem("customerName");
+      localStorage.removeItem("customerPhone");
+      localStorage.removeItem("customerAddress");
+
+      confirmBtn.textContent = "Order Placed!";
     }
   }
 

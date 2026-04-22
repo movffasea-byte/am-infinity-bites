@@ -1,0 +1,7 @@
+/checkout        /checkout.html         200
+/dashboard       /dashboard.html        200
+/login           /loginsys.html         200
+/order           /orderconfirm.html     200
+/payment         /payment-success.html  200
+/admin           /admin/admin.html      200
+/*               /index.html            404

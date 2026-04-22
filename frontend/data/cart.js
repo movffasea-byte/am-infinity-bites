@@ -1,12 +1,12 @@
-export function getCart() {
+ function getCart() {
   return JSON.parse(localStorage.getItem("cart")) || [];
 }
 
-export function saveCart(cart) {
+ function saveCart(cart) {
   localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-export function addToCart(productId, name, price, image) {
+function addToCart(productId, name, price, image) {
   const cart = getCart();
 
   let item = cart.find(i => i.id === productId);
@@ -21,7 +21,7 @@ export function addToCart(productId, name, price, image) {
   saveCart(cart);
 }
 
-export function decreaseQty(productId) {
+ function decreaseQty(productId) {
   let cart = getCart();
 
   // ✅ fixed: was i.productId, should be i.id
@@ -37,7 +37,7 @@ export function decreaseQty(productId) {
   }
 }
 
-export function increaseQty(productId) {
+function increaseQty(productId) {
   let cart = getCart();
 
   // ✅ fixed: was i.productId, should be i.id
@@ -49,7 +49,7 @@ export function increaseQty(productId) {
   saveCart(cart);
 }
 
-export function removeItem(productId) {
+ function removeItem(productId) {
   let cart = getCart();
 
   // ✅ fixed: was i.productId, should be i.id

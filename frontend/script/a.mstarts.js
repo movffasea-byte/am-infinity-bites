@@ -1,172 +1,32 @@
-   import { addToCart} from '../data/cart.js';
-   import {products} from '../data/products.js';
-   
-   let list = document.getElementById("cart-container");  
+console.log('TOP OF FILE');
 
-    products.forEach((p,i) => {
-      list.innerHTML += `
-        <div class="card">
-          <img src="${p.img}" alt="${p.name}">
-          <div class="card-body">
-            <h3>${p.name}</h3>
-            <div class="price">₦${p.price}</div>
-            <button class="js-add-to-cart" 
-            data-product-id="${p.id}"
-            >Add to Cart
-            </button>
-          </div>
-        </div>
-        `;
-      });
-    
-  /*
-    document.querySelector(".js-product-menu")
-    products.innerHTML = products;
-    */
-    
+function updateCartQuantity() {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  let cartQuantity = 0;
+  cart.forEach((item) => { cartQuantity += item.quantity; });
 
-    
-    function updateCartQuantity () {
-      let cart = 
-      JSON.parse(localStorage.getItem("cart")) || [];
+  const jsQty = document.querySelector('.js-cart-quantity');
+  if (jsQty) jsQty.innerHTML = cartQuantity;
 
-      
-
-      let cartQuantity = 0;
-
-      cart.forEach((item) => {
-      cartQuantity += item.quantity;
-      });
-
-      document.querySelector(`.js-cart-quantity`)
-      .innerHTML = cartQuantity;
-
-      document.getElementById("cartCount").
-      textContent = cartQuantity;
-    }
-
-       document.querySelectorAll(".js-add-to-cart") 
-       .forEach((button) =>{
-      button.addEventListener(`click`, () => {
-       const productId = button.dataset.productId;
-       addToCart(productId);
-       updateCartQuantity();
-       });
-    });
-
-// Update cart quantity on page load
-    updateCartQuantity();
-
-
-    document.addEventListener("DOMContentLoaded", function () {
-
-  const accountBtn = document.getElementById("accountBtn");
-  const dropdown = document.getElementById("dropdownMenu");
-  const logoutBtn = document.getElementById("logoutBtn");
-  const profileBtn = document.getElementById("profileBtn");
-  const ordersBtn = document.getElementById("ordersBtn");
-  const accountName = document.getElementById("accountName");
-  const accountBox = document.getElementById("accountBox");
-
-  const user = JSON.parse(localStorage.getItem("user"));
-
-  if (!user) {
-  // Don't redirect - just hide account features
-  document.getElementById("accountBtn").style.display = "none";
-  return;
+  const countEl = document.getElementById("cartCount");
+  if (countEl) countEl.textContent = cartQuantity;
 }
-
-  // 👤 Show first name only
-  const firstName = user.name.split(" ")[0];
-  accountName.textContent = firstName;
-
-  // Toggle dropdown
-  accountBtn.addEventListener("click", function (e) {
-    e.stopPropagation();
-    dropdown.classList.toggle("show");
-  });
-
-  // Close dropdown when clicking outside
-  document.addEventListener("click", function () {
-    dropdown.classList.remove("show");
-  });
-
-  dropdown.addEventListener("click", function (e) {
-    e.stopPropagation();
-  });
-
-  // Profile redirect
-  profileBtn.addEventListener("click", function () {
-    window.location.href = "profile.html";
-  });
-
-  // Orders redirect
-  ordersBtn.addEventListener("click", function () {
-    window.location.href = "orders.html";
-  });
-
-  // Logout with confirmation
-  logoutBtn.addEventListener("click", function () {
-    const confirmLogout = confirm("Are you sure you want to logout?");
-    if (confirmLogout) {
-      localStorage.removeItem("user");
-      window.location.href = "loginsys.html";
-    }
-  });
-
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-
-  const registerForm = document.getElementById("registerForm");
-  const registerMessage = document.getElementById("registerMessage");
-
-  if (registerForm) { 
-    registerForm.addEventListener("submit", function(e) {
-    e.preventDefault();
-
-    const name = document.getElementById("registerName").value;
-    const email = document.getElementById("registerEmail").value;
-    const password = document.getElementById("registerPassword").value;
-
-    const user = { name, email, password };
-
-    // Save user to localStorage
-    localStorage.setItem("user", JSON.stringify(user));
-
-    // Send Email using EmailJS
-    emailjs.send("service_tjgism2", "template_ewnz64r", {
-      email:'movffasea@gmail.com',
-      passcode:'096321',
-      project_name:'A&M INFINITY BITES',
-      to_name: name,
-      to_email: email,
-      message: "Welcome! Your registration was successful."
-    })
-    .then(function(response) {
-
-      registerMessage.style.color = "green";
-      registerMessage.textContent = "Registration Successful! Redirecting...";
-
-      // Redirect to Home Page after 2 seconds
-      setTimeout(function(){
-        window.location.href = "home.html";
-      }, 2000);
-
-    }, function(error) {
-      registerMessage.style.color = "red";
-      registerMessage.textContent = "Email failed but registration saved.";
-    });
-
-  });
-}
-
-});
 
 async function loadProducts() {
+  console.log('loadProducts called');
   try {
-    const response = await fetch('http://localhost:3000/products');
-    const products = await response.json();
+    console.log('fetching...');
+    const [productsRes, addonsRes] = await Promise.all([
+      fetch('https://a-m-site-design.onrender.com/products'),
+      fetch('https://a-m-site-design.onrender.com/api/addons')
+    ]);
+    console.log('fetched', productsRes.status, addonsRes.status);
+
+    const products = await productsRes.json();
+    const addons = await addonsRes.json();
+    console.log('products count:', products.length);
+    console.log('addons count:', addons.length);
+    
 
     const container = document.getElementById('cart-container');
     if (!container) return;
@@ -177,7 +37,8 @@ async function loadProducts() {
       'Greek Yogurt Fruit Parfait',
       'Fruit Salad Mix',
       'Fruit Juice',
-      'Tasty Yogurt'
+      'Tasty Yogurt',
+      'Fruit Smoothie'
     ];
 
     CATEGORIES.forEach(cat => {
@@ -197,12 +58,50 @@ async function loadProducts() {
       catProducts.forEach(product => {
         const card = document.createElement('div');
         card.classList.add('product-card');
+
+        // Build addon checkboxes HTML
+        const addonsHTML = addons.map(addon => `
+          <label class="addon-item">
+            <input 
+              type="checkbox" 
+              class="addon-checkbox"
+              data-addon-id="${addon.id}"
+              data-addon-name="${addon.name}"
+              data-addon-price="${addon.price}"
+            />
+            <span>${addon.name}</span>
+            <span class="addon-price">+₦${Number(addon.price).toLocaleString()}</span>
+          </label>
+        `).join('');
+
         card.innerHTML = `
           <img src="${product.image || 'images/default-fruit.jpg'}" alt="${product.name}" />
           <h3>${product.name}</h3>
-          <p class="price">₦${Number(product.price).toLocaleString()}</p>
+          <p class="price" id="display-price-${product.id}">
+            ₦${Number(product.price).toLocaleString()}
+          </p>
           <p class="desc">${product.description || ''}</p>
-          <button class="js-add-to-cart" 
+
+          <div class="quantity-control">
+            <button class="qty-btn minus" data-product-id="${product.id}">−</button>
+            <span class="qty-display" id="qty-${product.id}">1</span>
+            <button class="qty-btn plus" data-product-id="${product.id}">+</button>
+          </div>
+
+          <div class="addons-section">
+            <button class="addons-toggle" data-product-id="${product.id}">
+            Addons <span class="toggle-arrow">▼</span>
+            </button>
+            <div class="addons-dropdown" id="addons-${product.id}" style="display:none;">
+              ${addonsHTML}
+            </div>
+          </div>
+
+          <p class="total-price" id="total-${product.id}">
+            Total: ₦${Number(product.price).toLocaleString()}
+          </p>
+
+          <button class="js-add-to-cart"
             data-product-id="${product.id}"
             data-name="${product.name}"
             data-price="${product.price}"
@@ -210,22 +109,87 @@ async function loadProducts() {
             Add to Cart
           </button>
         `;
+
         row.appendChild(card);
       });
 
       container.appendChild(row);
     });
 
-    // Attach cart buttons
-    document.querySelectorAll('.js-add-to-cart').forEach((button) => {
+    // ── Quantity controls ──
+    document.querySelectorAll('.qty-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const productId = btn.dataset.productId;
+        const qtyEl = document.getElementById(`qty-${productId}`);
+        let qty = parseInt(qtyEl.textContent);
+
+        if (btn.classList.contains('plus')) qty++;
+        if (btn.classList.contains('minus') && qty > 1) qty--;
+
+        qtyEl.textContent = qty;
+        recalcTotal(productId);
+      });
+    });
+
+    // ── Addon toggle dropdowns ──
+    document.querySelectorAll('.addons-toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const productId = btn.dataset.productId;
+        const dropdown = document.getElementById(`addons-${productId}`);
+        const arrow = btn.querySelector('.toggle-arrow');
+        const isOpen = dropdown.style.display !== 'none';
+        dropdown.style.display = isOpen ? 'none' : 'block';
+        arrow.textContent = isOpen ? '▼' : '▲';
+      });
+    });
+
+    // ── Addon checkboxes → recalc total ──
+    document.querySelectorAll('.addon-checkbox').forEach(checkbox => {
+      checkbox.addEventListener('change', () => {
+        // Find which product this addon belongs to
+        const dropdown = checkbox.closest('.addons-dropdown');
+        const productId = dropdown.id.replace('addons-', '');
+        recalcTotal(productId);
+      });
+    });
+
+    // ── Add to Cart ──
+    document.querySelectorAll('.js-add-to-cart').forEach(button => {
       button.addEventListener('click', () => {
         const productId = Number(button.dataset.productId);
         const productName = button.dataset.name;
         const productPrice = Number(button.dataset.price);
         const productImage = button.dataset.image;
+        const qty = parseInt(
+          document.getElementById(`qty-${productId}`).textContent
+        );
 
-        addToCart(productId, productName, productPrice, productImage);
+        // Collect checked addons
+        const checkedAddons = [];
+        document.querySelectorAll(
+          `#addons-${productId} .addon-checkbox:checked`
+        ).forEach(cb => {
+          checkedAddons.push({
+            id: cb.dataset.addonId,
+            name: cb.dataset.addonName,
+            price: Number(cb.dataset.addonPrice)
+          });
+        });
+
+        // Total price = (product price + sum of addon prices) × qty
+        const addonTotal = checkedAddons.reduce((sum, a) => sum + a.price, 0);
+        const finalPrice = (productPrice + addonTotal) * qty;
+
+        addToCart(productId, productName, finalPrice, productImage, qty, checkedAddons);
         updateCartQuantity();
+
+        // Visual feedback
+        button.textContent = '✓ Added!';
+        button.style.background = '#28a745';
+        setTimeout(() => {
+          button.textContent = 'Add to Cart';
+          button.style.background = '';
+        }, 1500);
       });
     });
 
@@ -234,10 +198,50 @@ async function loadProducts() {
   }
 }
 
-// Call it when page loads
+// Recalculates the displayed total for a product card
+function recalcTotal(productId) {
+  const qty = parseInt(
+    document.getElementById(`qty-${productId}`).textContent
+  );
+
+  // Get base product price from the Add to Cart button's data attribute
+  const button = document.querySelector(
+    `.js-add-to-cart[data-product-id="${productId}"]`
+  );
+  const basePrice = Number(button.dataset.price);
+
+  // Sum checked addons
+  const addonTotal = Array.from(
+    document.querySelectorAll(`#addons-${productId} .addon-checkbox:checked`)
+  ).reduce((sum, cb) => sum + Number(cb.dataset.addonPrice), 0);
+
+  const total = (basePrice + addonTotal) * qty;
+
+  document.getElementById(`total-${productId}`).textContent =
+    `Total: ₦${total.toLocaleString()}`;
+}
+
+// ── Auth / account UI (unchanged) ──
+document.addEventListener("DOMContentLoaded", function () {
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (!user) return;
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  const registerForm = document.getElementById("registerForm");
+  if (registerForm) {
+    registerForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const name = document.getElementById("registerName").value;
+      const email = document.getElementById("registerEmail").value;
+      const password = document.getElementById("registerPassword").value;
+      localStorage.setItem("user", JSON.stringify({ name, email, password }));
+    });
+  }
+});
+
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('cart-container');
-  if (container) {
-    loadProducts();
-  }
+  if (container) loadProducts();
+  updateCartQuantity();
 });

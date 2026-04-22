@@ -37,12 +37,10 @@ document.addEventListener("DOMContentLoaded", function () {
       container.appendChild(div);
     });
 
-    // Total
     const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
     totalPriceEl.textContent = `Total: ₦${total.toLocaleString()}`;
     if (orderCountEl) orderCountEl.textContent = cartItems.length;
 
-    // Attach listeners after rendering
     attachListeners();
   }
 
@@ -54,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const item = cart.find(i => i.id === id);
     if (item) item.quantity += 1;
     localStorage.setItem("cart", JSON.stringify(cart));
-    renderCart("increaseQty");
+    renderCart();
   }
 
   function decreaseQty(id) {
@@ -67,14 +65,14 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
     localStorage.setItem("cart", JSON.stringify(cart));
-    renderCart("decreaseQty");
+    renderCart();
   }
 
   function removeItem(id) {
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
     cart = cart.filter(i => i.id !== id);
     localStorage.setItem("cart", JSON.stringify(cart));
-    renderCart("removeItem");
+    renderCart();
   }
 
   // =====================
@@ -100,41 +98,36 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+// At the top of placeOrder / initializePayment function
+const user = JSON.parse(localStorage.getItem("user"));
+if (!user) {
+  showPlaceOrderGuestPopup(); // ← this function comes from header.js
+  return;
+}
+// rest of your order logic continues below...
+
   // =====================
   // ORDER FORM
   // =====================
   const orderForm = document.getElementById("orderForm");
   if (orderForm) {
     orderForm.addEventListener("submit", function (e) {
-  e.preventDefault();
-  document.getElementById("checkoutForm").style.display = "none";
-  document.getElementById("confirmationMessage").style.display = "block";
-  
-  // Redirect to order confirmation after 2 seconds
-  setTimeout(() => {
-    window.location.href = "orderconfirm.html";
-  }, 2000);
+      e.preventDefault();
 
- // message disappear sfter 1 second
-setTimeout(() => {
-  document.getElementById("confirmationMessage").style.display = "none";
-}, 1000);
+      localStorage.setItem("customerName", document.getElementById("name").value);
+      localStorage.setItem("customerPhone", document.getElementById("phone").value);
+      localStorage.setItem("customerAddress", document.getElementById("address").value);
 
-});
+      document.getElementById("checkoutForm").style.display = "none";
+      document.getElementById("confirmationMessage").style.display = "block";
+
+      setTimeout(() => {
+        window.location.href = "orderconfirm.html";
+      }, 2000);
+    });
   }
 
   // Initial render
   renderCart();
 
 });
-
-
-
-
-
-
-
-
-
-
-

@@ -1,23 +1,20 @@
-const API = 'http://localhost:3000';
+const API = 'https://a-m-site-design.onrender.com';
 let token = localStorage.getItem('adminToken');
+let currentTab = 'products';
+let currentOrderFilter = 'active'; // 'active' or 'archived'
 
 const CATEGORIES = [
   'Greek Yogurt Fruit Parfait',
   'Fruit Salad Mix',
   'Fruit Juice',
+  'Fruit Smoothies',
   'Tasty Yogurt'
 ];
 
 const FRUIT_EMOJIS = {
-  'orange': '🍊',
-  'pineapple': '🍍',
-  'watermelon': '🍉',
-  'mango': '🥭',
-  'banana': '🍌',
-  'grape': '🍇',
-  'strawberry': '🍓',
-  'apple': '🍎',
-  'yogurt': '🥛',
+  'orange': '🍊', 'pineapple': '🍍', 'watermelon': '🍉',
+  'mango': '🥭', 'banana': '🍌', 'grape': '🍇',
+  'strawberry': '🍓', 'apple': '🍎', 'yogurt': '🥛',
   'default': '🍽️'
 };
 
@@ -29,6 +26,9 @@ function getEmoji(name) {
   return FRUIT_EMOJIS['default'];
 }
 
+// =====================
+// AUTH
+// =====================
 async function login() {
   const email = document.getElementById('loginEmail').value;
   const password = document.getElementById('loginPassword').value;
@@ -70,6 +70,7 @@ function showAdmin() {
   document.getElementById('logoutBtn').style.display = 'block';
   checkToken();
   loadProducts();
+  loadOrders();
 }
 
 function logout() {
@@ -94,6 +95,22 @@ async function checkToken() {
   }
 }
 
+// =====================
+// TAB SWITCHING
+// =====================
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById('productsTab').classList.toggle('active', tab === 'products');
+  document.getElementById('ordersTab').classList.toggle('active', tab === 'orders');
+  document.getElementById('productsView').style.display = tab === 'products' ? 'block' : 'none';
+  document.getElementById('ordersView').style.display = tab === 'orders' ? 'block' : 'none';
+  if (tab === 'orders') loadOrders();
+  if (tab === 'products') loadProducts();
+}
+
+// =====================
+// PRODUCTS
+// =====================
 async function loadProducts() {
   try {
     const res = await fetch(`${API}/products`);
@@ -109,7 +126,6 @@ async function loadProducts() {
       return;
     }
 
-    // Group by category
     CATEGORIES.forEach(cat => {
       const catProducts = products.filter(p => p.category === cat);
       if (catProducts.length === 0) return;
@@ -132,11 +148,8 @@ async function loadProducts() {
           <div class="product-actions">
             <span class="product-price">₦${Number(p.price).toLocaleString()}</span>
             <button class="btn-edit"
-              data-id="${p.id}"
-              data-name="${p.name}"
-              data-price="${p.price}"
-              data-desc="${p.description || ''}"
-              data-image="${p.image || ''}"
+              data-id="${p.id}" data-name="${p.name}" data-price="${p.price}"
+              data-desc="${p.description || ''}" data-image="${p.image || ''}"
               data-category="${p.category}">Edit</button>
             <button class="btn-danger" data-id="${p.id}">Delete</button>
           </div>
@@ -147,7 +160,6 @@ async function loadProducts() {
       list.appendChild(section);
     });
 
-    // Uncategorized products
     const uncategorized = products.filter(p => !CATEGORIES.includes(p.category));
     if (uncategorized.length > 0) {
       const section = document.createElement('div');
@@ -167,11 +179,8 @@ async function loadProducts() {
           <div class="product-actions">
             <span class="product-price">₦${Number(p.price).toLocaleString()}</span>
             <button class="btn-edit"
-              data-id="${p.id}"
-              data-name="${p.name}"
-              data-price="${p.price}"
-              data-desc="${p.description || ''}"
-              data-image="${p.image || ''}"
+              data-id="${p.id}" data-name="${p.name}" data-price="${p.price}"
+              data-desc="${p.description || ''}" data-image="${p.image || ''}"
               data-category="${p.category || ''}">Edit</button>
             <button class="btn-danger" data-id="${p.id}">Delete</button>
           </div>
@@ -181,7 +190,6 @@ async function loadProducts() {
       list.appendChild(section);
     }
 
-    // Attach edit and delete listeners after rendering
     attachProductListeners();
 
   } catch (err) {
@@ -192,21 +200,12 @@ async function loadProducts() {
 function attachProductListeners() {
   document.querySelectorAll('.btn-edit').forEach(btn => {
     btn.addEventListener('click', () => {
-      openEdit(
-        btn.dataset.id,
-        btn.dataset.name,
-        btn.dataset.price,
-        btn.dataset.desc,
-        btn.dataset.image,
-        btn.dataset.category
-      );
+      openEdit(btn.dataset.id, btn.dataset.name, btn.dataset.price,
+        btn.dataset.desc, btn.dataset.image, btn.dataset.category);
     });
   });
-
   document.querySelectorAll('.btn-danger').forEach(btn => {
-    btn.addEventListener('click', () => {
-      deleteProduct(btn.dataset.id);
-    });
+    btn.addEventListener('click', () => deleteProduct(btn.dataset.id));
   });
 }
 
@@ -227,10 +226,7 @@ async function addProduct() {
   try {
     const res = await fetch(`${API}/products`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
       body: JSON.stringify({ name, price: Number(price), description, image, category })
     });
     const data = await res.json();
@@ -281,10 +277,7 @@ async function saveEdit() {
   try {
     const res = await fetch(`${API}/products/${id}`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
       body: JSON.stringify({ name, price: Number(price), description, image, category })
     });
     const data = await res.json();
@@ -306,7 +299,6 @@ async function saveEdit() {
 
 async function deleteProduct(id) {
   if (!confirm('Delete this product?')) return;
-
   try {
     const res = await fetch(`${API}/products/${id}`, {
       method: 'DELETE',
@@ -319,37 +311,275 @@ async function deleteProduct(id) {
 }
 
 // =====================
-// ALL EVENT LISTENERS
+// ORDERS
+// =====================
+async function loadOrders() {
+  try {
+    const res = await fetch(`${API}/orders`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    const orders = await res.json();
+
+    // Stats: count only non-archived orders for totals
+    const activeOrders = orders.filter(o => o.archived != 1 && o.archived !== true);
+    document.getElementById('totalOrders').textContent = activeOrders.length;
+
+    const pending = activeOrders.filter(o => o.status !== 'paid' && o.status !== 'delivered').length;
+    document.getElementById('pendingOrders').textContent = pending;
+
+    const revenue = orders
+      .filter(o => o.status === 'paid' || o.status === 'delivered')
+      .reduce((sum, o) => sum + Number(o.amount), 0);
+    document.getElementById('totalRevenue').textContent = `₦${revenue.toLocaleString()}`;
+
+    // Filter based on current view
+    const filtered = currentOrderFilter === 'archived'
+      ? orders.filter(o => o.archived == 1 || o.archived === true)
+      : orders.filter(o => o.archived != 1 && o.archived !== true);
+
+    renderOrders(filtered);
+
+  } catch (err) {
+    console.error('Error loading orders:', err);
+    document.getElementById('ordersList').innerHTML =
+      '<div class="empty-state">Failed to load orders.</div>';
+  }
+}
+
+function renderOrders(orders) {
+  const list = document.getElementById('ordersList');
+  list.innerHTML = '';
+
+  // Filter tabs
+  const filterBar = document.createElement('div');
+  filterBar.className = 'order-filter-bar';
+  filterBar.innerHTML = `
+    <button class="order-filter-btn ${currentOrderFilter === 'active' ? 'active' : ''}" data-filter="active">
+      Active Orders
+    </button>
+    <button class="order-filter-btn ${currentOrderFilter === 'archived' ? 'active' : ''}" data-filter="archived">
+      Archived Orders
+    </button>
+  `;
+  list.appendChild(filterBar);
+
+  filterBar.querySelectorAll('.order-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentOrderFilter = btn.dataset.filter;
+      loadOrders();
+    });
+  });
+
+  if (orders.length === 0) {
+    const empty = document.createElement('div');
+    empty.className = 'empty-state';
+    empty.textContent = currentOrderFilter === 'archived'
+      ? 'No archived orders.'
+      : 'No active orders.';
+    list.appendChild(empty);
+    return;
+  }
+
+  orders.forEach(order => {
+    const date = order.created_at
+      ? new Date(order.created_at).toLocaleDateString('en-NG', {
+          day: 'numeric', month: 'short', year: 'numeric',
+          hour: '2-digit', minute: '2-digit'
+        })
+      : 'N/A';
+
+    let parsedItems = [];
+try {
+  parsedItems = Array.isArray(order.items)
+    ? order.items
+    : JSON.parse(order.items || '[]');
+} catch { parsedItems = []; }
+
+const itemsHTML = parsedItems.length > 0
+  ? parsedItems.map(i => {
+      const addons = i.addons && i.addons.length > 0
+        ? `<div class="item-addons">+ ${i.addons.map(a => a.name).join(', ')}</div>`
+        : '';
+      return `
+        <div class="order-item-row">
+          <span class="item-name">${i.name} <strong>x${i.quantity}</strong></span>
+          <span class="item-price">₦${Number(i.price || 0).toLocaleString()}</span>
+          ${addons}
+        </div>`;
+    }).join('')
+  : '<span>N/A</span>';
+
+    const statusClass = {
+      'paid': 'status-paid',
+      'delivered': 'status-delivered',
+      'pending': 'status-pending',
+      'preparing': 'status-preparing',
+      'cancelled': 'status-cancelled',
+      'cash': 'status-cash',
+      'bank': 'status-bank'
+    }[order.status] || 'status-pending';
+
+    const isArchived = order.archived == 1 || order.archived === true;
+
+    const row = document.createElement('div');
+    row.className = 'order-row';
+    row.innerHTML = `
+      <div class="order-header">
+        <div class="order-meta">
+          <span class="order-id">#${order.id}</span>
+          <span class="order-date">${date}</span>
+        </div>
+        <span class="order-status ${statusClass}">${order.status || 'pending'}</span>
+      </div>
+      <div class="order-body">
+        <div class="order-detail">
+          <span class="order-label">Customer</span>
+          <span class="order-value">${order.name || 'N/A'}</span>
+        </div>
+        <div class="order-detail">
+          <span class="order-label">Email</span>
+          <span class="order-value">${order.email || 'N/A'}</span>
+        </div>
+        <div class="order-detail">
+          <span class="order-label">Phone</span>
+          <span class="order-value">${order.phone || 'N/A'}</span>
+        </div>
+        <div class="order-detail">
+          <span class="order-label">Address</span>
+          <span class="order-value">${order.address || 'N/A'}</span>
+        </div>
+        <div class="order-detail order-items-block">
+          <span class="order-label">Items</span>
+          <div class="order-items-list">${itemsHTML}</div>
+        </div>
+        <div class="order-detail">
+          <span class="order-label">Payment</span>
+          <span class="order-value">${order.payment_method || 'N/A'}</span>
+        </div>
+        <div class="order-detail">
+          <span class="order-label">Amount</span>
+          <span class="order-value order-amount">₦${Number(order.amount).toLocaleString()}</span>
+        </div>
+      </div>
+      <div class="order-actions">
+        ${!isArchived ? `
+        <select class="status-select" data-order-id="${order.id}">
+          <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>Pending</option>
+          <option value="paid" ${order.status === 'paid' ? 'selected' : ''}>Paid</option>
+          <option value="preparing" ${order.status === 'preparing' ? 'selected' : ''}>Preparing</option>
+          <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>Delivered</option>
+          <option value="cancelled" ${order.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+        </select>
+        <button class="btn-update-status" data-order-id="${order.id}">Update Status</button>
+        ` : ''}
+        <button class="btn-archive ${isArchived ? 'btn-unarchive' : ''}" data-order-id="${order.id}" data-archived="${isArchived}">
+          ${isArchived ? '↩ Restore' : '📦 Archive'}
+        </button>
+        <button class="btn-delete-order" data-order-id="${order.id}">🗑 Delete</button>
+      </div>
+    `;
+    list.appendChild(row);
+  });
+
+  attachOrderListeners();
+}
+
+function attachOrderListeners() {
+  // Update status
+  document.querySelectorAll('.btn-update-status').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const orderId = btn.dataset.orderId;
+      const select = document.querySelector(`.status-select[data-order-id="${orderId}"]`);
+      const status = select.value;
+
+      try {
+        const res = await fetch(`${API}/orders/${orderId}/status`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ status })
+        });
+
+        if (res.ok) {
+          btn.textContent = '✓ Updated!';
+          btn.style.color = '#4caf7d';
+          setTimeout(() => {
+            btn.textContent = 'Update Status';
+            btn.style.color = '';
+            loadOrders();
+          }, 1500);
+        }
+      } catch (err) {
+        console.error('Status update error:', err);
+      }
+    });
+  });
+
+  // Archive / Restore
+  document.querySelectorAll('.btn-archive').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const orderId = btn.dataset.orderId;
+      const isArchived = btn.dataset.archived === 'true';
+      const action = isArchived ? 'restore' : 'archive';
+
+      if (!confirm(`${isArchived ? 'Restore' : 'Archive'} this order?`)) return;
+
+      try {
+        const res = await fetch(`${API}/orders/${orderId}/archive`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ archived: !isArchived })
+        });
+
+        if (res.ok) loadOrders();
+        else alert(`Failed to ${action} order.`);
+      } catch (err) {
+        console.error('Archive error:', err);
+      }
+    });
+  });
+
+  // Delete order permanently
+  document.querySelectorAll('.btn-delete-order').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const orderId = btn.dataset.orderId;
+      if (!confirm('Permanently delete this order? This cannot be undone.')) return;
+
+      try {
+        const res = await fetch(`${API}/orders/${orderId}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (res.ok) loadOrders();
+        else alert('Failed to delete order.');
+      } catch (err) {
+        console.error('Delete order error:', err);
+      }
+    });
+  });
+}
+
+// =====================
+// EVENT LISTENERS
 // =====================
 document.addEventListener('DOMContentLoaded', () => {
-
-  // Login button
   document.getElementById('loginBtn').addEventListener('click', login);
-
-  // Logout button
   document.getElementById('logoutBtn').addEventListener('click', logout);
-
-  // Add product button
   document.getElementById('addProductBtn').addEventListener('click', addProduct);
-
-  // Save edit button
   document.getElementById('saveEditBtn').addEventListener('click', saveEdit);
-
-  // Cancel edit button
   document.getElementById('cancelEditBtn').addEventListener('click', closeModal);
+  document.getElementById('productsTab').addEventListener('click', () => switchTab('products'));
+  document.getElementById('ordersTab').addEventListener('click', () => switchTab('orders'));
 
-  // Close modal when clicking outside
-  document.getElementById('editModal').addEventListener('click', function(e) {
+  document.getElementById('editModal').addEventListener('click', function (e) {
     if (e.target === this) closeModal();
   });
 
-  // Login on Enter key
-  document.addEventListener('keydown', function(e) {
+  document.addEventListener('keydown', function (e) {
     if (e.key === 'Enter' && document.getElementById('loginScreen').style.display !== 'none') {
       login();
     }
   });
 
-  // Check if already logged in
   if (token) showAdmin();
 });
