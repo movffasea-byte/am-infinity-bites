@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-  const API = 'https://a-m-site-design.onrender.com';
+  const API = 'https://am-infinity-bites-production.up.railway.app';
 
   // Temp store for registration data before OTP verify
   let pendingUser = null;
@@ -303,22 +303,23 @@ document.addEventListener("DOMContentLoaded", function () {
       const data = await res.json();
 
       if (data.token) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify({ name: data.name, email }));
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify({ name: data.name, email: email }));
 
-        if (remember) {
-          localStorage.setItem("rememberedUser", JSON.stringify({ email }));
-        } else {
-          localStorage.removeItem("rememberedUser");
-        }
-
-        showMsg(loginMessage, "Login Successful! Redirecting...", "success");
-        setTimeout(() => window.location.href = "index.html", 1500);
-
+      if (remember) {
+        localStorage.setItem("rememberedUser", JSON.stringify({ email }));
       } else {
-        showMsg(loginMessage, data.message || "Invalid email or password", "error");
+        localStorage.removeItem("rememberedUser");
       }
 
+      showMsg(loginMessage, "Login Successful! Redirecting...", "success");
+      setTimeout(() => window.location.href = "index.html", 1500);
+
+    } else {
+      showMsg(loginMessage, data.message || "Invalid email or password", "error");
+    }
+
+    
     } catch (err) {
       showMsg(loginMessage, "Server not reachable. Start your backend!", "error");
       console.error(err);

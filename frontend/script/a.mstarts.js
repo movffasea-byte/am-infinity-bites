@@ -17,8 +17,8 @@ async function loadProducts() {
   try {
     console.log('fetching...');
     const [productsRes, addonsRes] = await Promise.all([
-      fetch('https://a-m-site-design.onrender.com/products'),
-      fetch('https://a-m-site-design.onrender.com/api/addons')
+      fetch('https://am-infinity-bites-production.up.railway.app/products'),
+      fetch('https://am-infinity-bites-production.up.railway.app/api/addons')
     ]);
     console.log('fetched', productsRes.status, addonsRes.status);
 

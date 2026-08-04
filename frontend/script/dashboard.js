@@ -1,9 +1,12 @@
-const API = 'https://a-m-site-design.onrender.com';
+const API = 'https://am-infinity-bites-production.up.railway.app';
 const token = localStorage.getItem('token');
 
 if (!token) {
   alert('Please login to view your dashboard.');
   window.location.href = 'index.html';
+} else {
+    // Logged in — load the dashboard normally
+    loadDashboard();
 }
 
 // =====================
@@ -26,7 +29,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Logout
   document.getElementById('logoutBtn').addEventListener('click', () => {
-    localStorage.removeItem('userToken');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
     localStorage.removeItem('userName');
     window.location.href = 'index.html';
   });
@@ -52,7 +56,8 @@ async function loadProfile() {
     });
 
     if (res.status === 401) {
-      localStorage.removeItem('userToken');
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
       window.location.href = 'index.html';
       return;
     }

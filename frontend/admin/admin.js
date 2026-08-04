@@ -1,4 +1,4 @@
-const API = 'https://a-m-site-design.onrender.com';
+const API = 'https://am-infinity-bites-production.up.railway.app';
 let token = localStorage.getItem('adminToken');
 let currentTab = 'products';
 let currentOrderFilter = 'active'; // 'active' or 'archived'

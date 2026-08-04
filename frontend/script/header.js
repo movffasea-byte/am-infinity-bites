@@ -14,10 +14,10 @@
   let user = null;
   try { user = stored ? JSON.parse(stored) : null; } catch (e) { user = null; }
 
-  const currentPage = window.location.pathname.split("/").pop() || "a.mstarts.html";
+  const currentPage = window.location.pathname.split("/").pop() || "index.html";
 
   // Pages where guests should see "Dashboard" instead of "Hi Guest"
-  const guestDashboardPages = ["a.mstarts.html", "checkout.html", ""];
+  const guestDashboardPages = ["index .html", ""];
 
   if (user && (user.name || user.firstName)) {
     // ── LOGGED IN ──

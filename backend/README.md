@@ -12,7 +12,7 @@ Built with:
 
 ## 🚀 Live API
 
-https://a_minfinity_database.onrender.com
+https://am-infinity-bites-production.up.railway.app
 
 ---
 
