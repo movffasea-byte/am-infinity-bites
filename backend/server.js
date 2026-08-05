@@ -4,7 +4,7 @@ const cors = require('cors');
 const axios = require('axios');
 const nodemailer = require('nodemailer');
 const authRoutes = require('./auth');
-const { router: adminRoutes, requireAdmin } = require('.adminAuth');
+const { router: adminRoutes, requireAdmin } = require('./adminAuth');
 const verifyToken = require('./middleware');
 const { initDB, getPool } = require('./database');
 
