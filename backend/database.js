@@ -56,6 +56,33 @@ async function initDB() {
         price NUMERIC NOT NULL
       )
     `);
+
+    // =====================
+// ADMIN ACCOUNTS
+// =====================
+  await client.query(`
+    CREATE TABLE IF NOT EXISTS admins (
+      id SERIAL PRIMARY KEY,
+      name VARCHAR(100) NOT NULL,
+      email VARCHAR(255) UNIQUE NOT NULL,
+      password VARCHAR(255) NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
+// =====================
+// ADMIN PASSWORD RESETS
+// =====================
+  await client.query(`
+    CREATE TABLE IF NOT EXISTS admin_password_resets (
+      id SERIAL PRIMARY KEY,
+      admin_id INTEGER NOT NULL REFERENCES admins(id) ON DELETE CASCADE,
+      code_hash VARCHAR(255) NOT NULL,
+      expires_at TIMESTAMP NOT NULL,
+      used BOOLEAN DEFAULT FALSE,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
     
     // Seed addons if empty
     const { rows } = await client.query('SELECT COUNT(*) as count FROM addons');

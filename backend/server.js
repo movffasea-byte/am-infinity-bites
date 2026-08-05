@@ -4,6 +4,7 @@ const cors = require('cors');
 const axios = require('axios');
 const nodemailer = require('nodemailer');
 const authRoutes = require('./auth');
+const { router: adminRoutes, requireAdmin } = require('.adminAuth');
 const verifyToken = require('./middleware');
 const { initDB, getPool } = require('./database');
 
@@ -33,6 +34,7 @@ app.use(cors({
 
 app.use(express.json());
 app.use('/auth', authRoutes);
+app.use('/admin',adminRoutes)
 
 app.get('/', (req, res) => {
   res.send('Welcome to A&M Infinity Bites Backend!');
@@ -73,7 +75,7 @@ app.get('/products/:id', async (req, res) => {
   }
 });
 
-app.post('/products', verifyToken, async (req, res) => {
+app.post('/products', requireAdmin, async (req, res) => {
   try {
     const pool = getPool();
     const { name, price, description, image, category } = req.body;
@@ -87,7 +89,7 @@ app.post('/products', verifyToken, async (req, res) => {
   }
 });
 
-app.put('/products/:id', verifyToken, async (req, res) => {
+app.put('/products/:id', requireAdmin, async (req, res) => {
   try {
     const pool = getPool();
     const { name, price, description, image, category } = req.body;
@@ -101,7 +103,7 @@ app.put('/products/:id', verifyToken, async (req, res) => {
   }
 });
 
-app.delete('/products/:id', verifyToken, async (req, res) => {
+app.delete('/products/:id', requireAdmin, async (req, res) => {
   try {
     const pool = getPool();
     await pool.query('DELETE FROM products WHERE id = $1', [req.params.id]);
@@ -130,7 +132,7 @@ app.post('/orders', async (req, res) => {
   }
 });
 
-app.get('/orders', verifyToken, async (req, res) => {
+app.get('/orders', requireAdmin, async (req, res) => {
   try {
     const pool = getPool();
     const result = await pool.query('SELECT * FROM orders ORDER BY id DESC');
@@ -145,7 +147,7 @@ app.get('/orders', verifyToken, async (req, res) => {
   }
 });
 
-app.put('/orders/:id/status', verifyToken, async (req, res) => {
+app.put('/orders/:id/status', requireAdmin, async (req, res) => {
   try {
     const pool = getPool();
     const { status } = req.body;
@@ -167,7 +169,7 @@ app.put('/orders/reference/:reference', async (req, res) => {
   }
 });
 
-app.put('/orders/:id/archive', verifyToken, async (req, res) => {
+app.put('/orders/:id/archive', requireAdmin, async (req, res) => {
   try {
     const pool = getPool();
     const { archived } = req.body;
@@ -179,7 +181,7 @@ app.put('/orders/:id/archive', verifyToken, async (req, res) => {
   }
 });
 
-app.delete('/orders/:id', verifyToken, async (req, res) => {
+app.delete('/orders/:id', requireAdmin, async (req, res) => {
   try {
     const pool = getPool();
     await pool.query('DELETE FROM orders WHERE id=$1', [req.params.id]);
