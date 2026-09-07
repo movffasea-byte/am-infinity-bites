@@ -1,5 +1,7 @@
 require('dotenv').config();
 
+console.log('DEBUG DATABASE_URL:', process.env.DATABASE_URL);
+
 const bcrypt = require('bcryptjs');
 const { getPool } = require('./database');
 
