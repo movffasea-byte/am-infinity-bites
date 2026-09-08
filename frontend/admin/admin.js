@@ -41,6 +41,12 @@ async function login() {
   }
 
   try {
+    // NOTE: this hits /admin/login (the admin router, checks the
+    // `admins` table) — NOT /auth/login, which is the customer-facing
+    // login checking the `users` table. Using /auth/login here was
+    // the root cause of a past "Invalid email or password" bug where
+    // correct admin credentials still failed, because the request
+    // was silently being checked against the wrong table.
     const res = await fetch(`${API}/admin/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -51,7 +57,7 @@ async function login() {
     if (data.token) {
       token = data.token;
       localStorage.setItem('adminToken', token);
-      document.getElementById('adminName').textContent = data.name;
+      document.getElementById('adminName').textContent = data.admin ? data.admin.name : (data.name || '');
       msg.textContent = '';
       showAdmin();
     } else {
@@ -560,6 +566,150 @@ function attachOrderListeners() {
 }
 
 // =====================
+// PASSWORD SHOW/HIDE TOGGLE
+// =====================
+function setupPasswordToggle(inputId, btnId) {
+  const input = document.getElementById(inputId);
+  const btn = document.getElementById(btnId);
+  if (!input || !btn) return;
+
+  btn.addEventListener('click', () => {
+    const isHidden = input.type === 'password';
+    input.type = isHidden ? 'text' : 'password';
+    btn.textContent = isHidden ? '🙈' : '👁';
+    btn.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
+  });
+}
+
+// =====================
+// FORGOT PASSWORD FLOW
+// =====================
+let resetFlowEmail = '';
+let resetFlowCode = '';
+
+function showLoginScreen() {
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('forgotScreen').style.display = 'none';
+}
+
+function showForgotScreen() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('forgotScreen').style.display = 'flex';
+  // Always start back at step 1 when opening the flow
+  document.getElementById('forgotStep1').style.display = 'block';
+  document.getElementById('forgotStep2').style.display = 'none';
+  document.getElementById('forgotStep3').style.display = 'none';
+  document.getElementById('forgotStep1Msg').textContent = '';
+  document.getElementById('forgotStep2Msg').textContent = '';
+  document.getElementById('forgotStep3Msg').textContent = '';
+  document.getElementById('forgotEmail').value = '';
+  document.getElementById('resetCode').value = '';
+  document.getElementById('newPassword').value = '';
+}
+
+async function sendResetCode() {
+  const email = document.getElementById('forgotEmail').value.trim();
+  const msg = document.getElementById('forgotStep1Msg');
+
+  if (!email) {
+    msg.textContent = 'Please enter your email';
+    msg.className = 'msg error';
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API}/admin/forgot-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    await res.json();
+
+    // Backend always returns a generic success-shaped message
+    // (by design, so it doesn't reveal whether an email exists).
+    resetFlowEmail = email;
+    msg.textContent = '';
+    document.getElementById('forgotStep1').style.display = 'none';
+    document.getElementById('forgotStep2').style.display = 'block';
+  } catch (err) {
+    msg.textContent = 'Server not reachable';
+    msg.className = 'msg error';
+  }
+}
+
+async function verifyResetCode() {
+  const code = document.getElementById('resetCode').value.trim();
+  const msg = document.getElementById('forgotStep2Msg');
+
+  if (!code) {
+    msg.textContent = 'Please enter the code';
+    msg.className = 'msg error';
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API}/admin/verify-reset-code`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: resetFlowEmail, code })
+    });
+    const data = await res.json();
+
+    if (res.ok) {
+      resetFlowCode = code;
+      msg.textContent = '';
+      document.getElementById('forgotStep2').style.display = 'none';
+      document.getElementById('forgotStep3').style.display = 'block';
+    } else {
+      msg.textContent = data.message || 'Invalid code';
+      msg.className = 'msg error';
+    }
+  } catch (err) {
+    msg.textContent = 'Server not reachable';
+    msg.className = 'msg error';
+  }
+}
+
+async function submitNewPassword() {
+  const newPassword = document.getElementById('newPassword').value;
+  const msg = document.getElementById('forgotStep3Msg');
+
+  if (!newPassword || newPassword.length < 8) {
+    msg.textContent = 'Password must be at least 8 characters';
+    msg.className = 'msg error';
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API}/admin/reset-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: resetFlowEmail,
+        code: resetFlowCode,
+        newPassword
+      })
+    });
+    const data = await res.json();
+
+    if (res.ok) {
+      msg.textContent = '✓ Password changed! You can now log in.';
+      msg.className = 'msg success';
+      setTimeout(() => {
+        showLoginScreen();
+        document.getElementById('loginEmail').value = resetFlowEmail;
+      }, 1500);
+    } else {
+      msg.textContent = data.message || 'Failed to reset password';
+      msg.className = 'msg error';
+    }
+  } catch (err) {
+    msg.textContent = 'Server not reachable';
+    msg.className = 'msg error';
+  }
+}
+
+// =====================
 // EVENT LISTENERS
 // =====================
 document.addEventListener('DOMContentLoaded', () => {
@@ -580,6 +730,25 @@ document.addEventListener('DOMContentLoaded', () => {
       login();
     }
   });
+
+  // Password show/hide toggles
+  setupPasswordToggle('loginPassword', 'toggleLoginPassword');
+  setupPasswordToggle('newPassword', 'toggleNewPassword');
+
+  // Forgot-password flow
+  document.getElementById('forgotPasswordLink').addEventListener('click', (e) => {
+    e.preventDefault();
+    showForgotScreen();
+  });
+
+  document.getElementById('backToLoginLink').addEventListener('click', (e) => {
+    e.preventDefault();
+    showLoginScreen();
+  });
+
+  document.getElementById('sendCodeBtn').addEventListener('click', sendResetCode);
+  document.getElementById('verifyCodeBtn').addEventListener('click', verifyResetCode);
+  document.getElementById('resetPasswordBtn').addEventListener('click', submitNewPassword);
 
   if (token) showAdmin();
 });
