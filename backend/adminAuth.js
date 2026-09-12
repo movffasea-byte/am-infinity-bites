@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
 const { getPool } = require('./database');
 
@@ -11,20 +11,11 @@ const router = express.Router();
 const RESET_CODE_EXPIRY_MINUTES = 10;
 
 // ======================================================
-// EMAIL TRANSPORTER
+// EMAIL CLIENT (Resend)
 // ======================================================
 
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 587,
-  secure: false,
-  requireTLS: true,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  },
-  family: 4
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
+const FROM_EMAIL = process.env.FROM_EMAIL || 'A&M Infinity Bites <admin@aminfinitybites.health>';
 
 // ======================================================
 // CREATE ADMIN JWT
@@ -273,9 +264,8 @@ router.post('/forgot-password', async (req, res) => {
     );
 
     try {
-      await transporter.sendMail({
-        from:
-          `"A&M Infinity Bites" <${process.env.EMAIL_USER}>`,
+      const { data, error } = await resend.emails.send({
+        from: FROM_EMAIL,
 
         to: admin.email,
 
@@ -323,6 +313,10 @@ router.post('/forgot-password', async (req, res) => {
           </div>
         `
       });
+
+      if (error) {
+        throw error;
+      }
 
     } catch (emailError) {
       console.error(

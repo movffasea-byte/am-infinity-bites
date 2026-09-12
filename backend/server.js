@@ -1,13 +1,9 @@
 require('dotenv').config();
-const dns = require('dns');
-dns.setDefaultResultOrder('ipv4first');
-console.log('DNS default result order set to:', dns.getDefaultResultOrder());
-console.log('Node version:', process.version);
 
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 const authRoutes = require('./auth');
 const { router: adminRoutes, requireAdmin } = require('./adminAuth');
 const verifyToken = require('./middleware');
@@ -17,19 +13,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const PAYSTACK_SECRET = process.env.PAYSTACK_SECRET;
-const EMAIL_USER = process.env.EMAIL_USER;
-const EMAIL_PASS = process.env.EMAIL_PASS;
-
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 587,
-  secure: false,
-  requireTLS: true,
-  auth: { user: EMAIL_USER, pass: EMAIL_PASS },
-  family: 4
-});
-
-module.exports.transporter = transporter;
+const resend = new Resend(process.env.RESEND_API_KEY);
+const FROM_EMAIL = process.env.FROM_EMAIL || 'A&M Infinity Bites <admin@aminfinitybites.health>';
 
 const otpStore = {};
 // =====================
@@ -212,8 +197,8 @@ app.post('/auth/send-otp', async (req, res) => {
   otpStore[email] = { otp, expires: Date.now() + 10 * 60 * 1000 };
 
   try {
-    await transporter.sendMail({
-      from: `"A&M Infinity Bites" <${EMAIL_USER}>`,
+    const { data, error } = await resend.emails.send({
+      from: FROM_EMAIL,
       to: email,
       subject: 'Your A&M Infinity Bites Verification Code',
       html: `
@@ -225,6 +210,12 @@ app.post('/auth/send-otp', async (req, res) => {
         </div>
       `
     });
+
+    if (error) {
+      console.error('Email send error:', error);
+      return res.status(500).json({ message: 'Failed to send OTP. Check email config.' });
+    }
+
     res.json({ message: 'OTP sent successfully!' });
   } catch (err) {
     console.error('Email send error:', err);
