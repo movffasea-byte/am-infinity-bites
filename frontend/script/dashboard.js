@@ -4,9 +4,6 @@ const token = localStorage.getItem('token');
 if (!token) {
   alert('Please login to view your dashboard.');
   window.location.href = 'index.html';
-} else {
-    // Logged in — load the dashboard normally
-    loadDashboard();
 }
 
 // =====================
