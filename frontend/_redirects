@@ -4,4 +4,4 @@
 /order           /orderconfirm.html     200
 /payment         /payment-success.html  200
 /admin           /admin/admin.html      200
-/*               /index.html            404
+/*               /index.html            200
