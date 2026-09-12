@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { getPool } = require('./database');
+const { resend, FROM_EMAIL } = require('./emailClient');
 
 const SECRET_KEY = process.env.JWT_SECRET;
 
@@ -28,10 +29,9 @@ router.post('/signup', async (req, res) => {
 
     // ── Notify admin of new registration ──
     try {
-      const transporter = require('./server').transporter;
-      await transporter.sendMail({
-        from: `"A&M Infinity Bites" <${process.env.EMAIL_USER}>`,
-        to: process.env.EMAIL_USER,
+      const { error } = await resend.emails.send({
+        from: FROM_EMAIL,
+        to: process.env.ADMIN_NOTIFY_EMAIL || 'admin@aminfinitybites.health',
         subject: '🆕 New User Registered — A&M Infinity Bites',
         html: `
           <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 32px; background: #fffdf7; border-radius: 12px;">
@@ -42,6 +42,9 @@ router.post('/signup', async (req, res) => {
           </div>
         `
       });
+      if (error) {
+        console.error('Admin notification failed:', error);
+      }
     } catch (mailErr) {
       console.error('Admin notification failed:', mailErr);
     }
@@ -107,6 +110,7 @@ router.get('/profile', async (req, res) => {
 
     res.json(result.rows[0]);
   } catch (err) {
+    console.error('Profile verify error:', err.name, err.message);
     res.status(401).json({ message: 'Invalid token' });
   }
 });
@@ -129,6 +133,7 @@ router.put('/profile', async (req, res) => {
     );
     res.json({ message: 'Profile updated successfully!' });
   } catch (err) {
+    console.error('Profile update verify error:', err.name, err.message);
     res.status(401).json({ message: 'Invalid token' });
   }
 });
@@ -156,6 +161,7 @@ router.get('/my-orders', async (req, res) => {
 
     res.json(orders);
   } catch (err) {
+    console.error('My-orders verify error:', err.name, err.message);
     res.status(401).json({ message: 'Invalid token' });
   }
 });

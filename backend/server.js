@@ -3,7 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
-const { Resend } = require('resend');
+const { resend, FROM_EMAIL } = require('./emailClient');
 const authRoutes = require('./auth');
 const { router: adminRoutes, requireAdmin } = require('./adminAuth');
 const verifyToken = require('./middleware');
@@ -13,8 +13,6 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const PAYSTACK_SECRET = process.env.PAYSTACK_SECRET;
-const resend = new Resend(process.env.RESEND_API_KEY);
-const FROM_EMAIL = process.env.FROM_EMAIL || 'A&M Infinity Bites <admin@aminfinitybites.health>';
 
 const otpStore = {};
 // =====================
@@ -207,6 +205,7 @@ app.post('/auth/send-otp', async (req, res) => {
           <p style="color: #444;">Hi ${name || 'there'}, please verify your email address.</p>
           <div style="background: #ff6b2b; color: #fff; font-size: 2.5rem; font-weight: bold; text-align: center; padding: 24px; border-radius: 10px; letter-spacing: 8px;">${otp}</div>
           <p style="color: #999; font-size: 0.85rem; margin-top: 20px;">This code expires in 10 minutes. Do not share it with anyone.</p>
+          <p style="color: #bbb; font-size: 0.75rem; margin-top: 12px;">This is an automated message — please do not reply. For help, contact admin@aminfinitybites.health.</p>
         </div>
       `
     });

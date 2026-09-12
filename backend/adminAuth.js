@@ -2,20 +2,13 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-const { Resend } = require('resend');
+const { resend, FROM_EMAIL } = require('./emailClient');
 
 const { getPool } = require('./database');
 
 const router = express.Router();
 
 const RESET_CODE_EXPIRY_MINUTES = 10;
-
-// ======================================================
-// EMAIL CLIENT (Resend)
-// ======================================================
-
-const resend = new Resend(process.env.RESEND_API_KEY);
-const FROM_EMAIL = process.env.FROM_EMAIL || 'A&M Infinity Bites <admin@aminfinitybites.health>';
 
 // ======================================================
 // CREATE ADMIN JWT
@@ -308,6 +301,11 @@ router.post('/forgot-password', async (req, res) => {
             <p>
               If you didn't request this reset,
               you can ignore this email.
+            </p>
+
+            <p style="color: #999; font-size: 0.8rem; margin-top: 16px;">
+              This is an automated message — please do not reply.
+              For help, contact admin@aminfinitybites.health.
             </p>
 
           </div>
