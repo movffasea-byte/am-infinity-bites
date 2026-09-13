@@ -227,18 +227,6 @@ document.addEventListener("DOMContentLoaded", function () {
   if (!user) return;
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-  const registerForm = document.getElementById("registerForm");
-  if (registerForm) {
-    registerForm.addEventListener("submit", function (e) {
-      e.preventDefault();
-      const name = document.getElementById("registerName").value;
-      const email = document.getElementById("registerEmail").value;
-      const password = document.getElementById("registerPassword").value;
-      localStorage.setItem("user", JSON.stringify({ name, email, password }));
-    });
-  }
-});
 
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('cart-container');

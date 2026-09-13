@@ -1,6 +1,10 @@
 const jwt = require('jsonwebtoken');
 
-const SECRET_KEY = process.env.JWT_SECRET || "fallback_secret";
+if (!process.env.JWT_SECRET) {
+  throw new Error('JWT_SECRET is not set. Refusing to start with an insecure fallback secret.');
+}
+
+const SECRET_KEY = process.env.JWT_SECRET;
 
 function verifyToken(req, res, next) {
   const authHeader = req.headers['authorization'];
