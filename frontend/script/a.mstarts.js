@@ -17,8 +17,8 @@ async function loadProducts() {
   try {
     console.log('fetching...');
     const [productsRes, addonsRes] = await Promise.all([
-      fetch('https://am-infinity-bites-production.up.railway.app/products'),
-      fetch('https://am-infinity-bites-production.up.railway.app/api/addons')
+     fetch('https://api.aminfinitybites.health/products'),
+fetch('https://api.aminfinitybites.health/api/addons')
     ]);
     console.log('fetched', productsRes.status, addonsRes.status);
 

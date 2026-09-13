@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-  const API = 'https://am-infinity-bites-production.up.railway.app';
+ const API = 'https://api.aminfinitybites.health';
 
   // Temp store for registration data before OTP verify
   let pendingUser = null;

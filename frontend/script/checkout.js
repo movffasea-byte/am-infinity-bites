@@ -3,7 +3,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const container = document.getElementById("cartItems");
   const totalPriceEl = document.getElementById("totalPrice");
   const orderCountEl = document.querySelector('.order-count');
-  const API = 'https://am-infinity-bites-production.up.railway.app';
+
+  
+  const API = 'https://api.aminfinitybites.health';
 
   // =====================
   // RENDER CART

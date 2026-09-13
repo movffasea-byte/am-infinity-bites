@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const referenceDisplay = document.getElementById("referenceDisplay");
   const verifyStatus = document.getElementById("verifyStatus");
 
-  const API = 'http://localhost:3000';
+  cconst API = 'https://api.aminfinitybites.health';
 
   // Prevent running more than once
   if (sessionStorage.getItem("paymentVerified")) {

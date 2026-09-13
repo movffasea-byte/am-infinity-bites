@@ -9,7 +9,7 @@
 
   if (!accountName) return;
 
-  const API = 'https://am-infinity-bites-production.up.railway.app';
+  const API = 'https://api.aminfinitybites.health';
 
   let user = null;
   try {
