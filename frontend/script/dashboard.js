@@ -1,15 +1,12 @@
 const API = 'https://am-infinity-bites-production.up.railway.app';
-const token = localStorage.getItem('token');
-
-if (!token) {
-  alert('Please login to view your dashboard.');
-  window.location.href = 'index.html';
-}
 
 // =====================
 // INIT
 // =====================
 document.addEventListener('DOMContentLoaded', async () => {
+  const loggedIn = await checkAuth();
+  if (!loggedIn) return;
+
   await loadProfile();
   await loadOrders();
 
@@ -25,13 +22,34 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('saveAddressBtn').addEventListener('click', saveAddress);
 
   // Logout
-  document.getElementById('logoutBtn').addEventListener('click', () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('userName');
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    try {
+      await fetch(`${API}/auth/logout`, { method: 'POST', credentials: 'include' });
+    } catch (err) {
+      console.error('Logout error:', err);
+    }
     window.location.href = 'index.html';
   });
 });
+
+// =====================
+// AUTH CHECK
+// =====================
+async function checkAuth() {
+  try {
+    const res = await fetch(`${API}/auth/me`, { credentials: 'include' });
+    if (!res.ok) {
+      alert('Please login to view your dashboard.');
+      window.location.href = 'index.html';
+      return false;
+    }
+    return true;
+  } catch (err) {
+    alert('Please login to view your dashboard.');
+    window.location.href = 'index.html';
+    return false;
+  }
+}
 
 // =====================
 // SECTION SWITCHING
@@ -48,13 +66,9 @@ function switchSection(name) {
 // =====================
 async function loadProfile() {
   try {
-    const res = await fetch(`${API}/auth/profile`, {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
+    const res = await fetch(`${API}/auth/profile`, { credentials: 'include' });
 
     if (res.status === 401) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
       window.location.href = 'index.html';
       return;
     }
@@ -89,9 +103,7 @@ async function loadProfile() {
 // =====================
 async function loadOrders() {
   try {
-    const res = await fetch(`${API}/auth/my-orders`, {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
+    const res = await fetch(`${API}/auth/my-orders`, { credentials: 'include' });
 
     const orders = await res.json();
 
@@ -195,10 +207,8 @@ async function saveProfile() {
   try {
     const res = await fetch(`${API}/auth/profile`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify({ name, phone, address })
     });
 
@@ -233,10 +243,8 @@ async function saveAddress() {
   try {
     const res = await fetch(`${API}/auth/profile`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify({ name, phone, address })
     });
 

@@ -7,6 +7,14 @@ const { resend, FROM_EMAIL } = require('./emailClient');
 
 const SECRET_KEY = process.env.JWT_SECRET;
 
+const COOKIE_OPTIONS = {
+  httpOnly: true,
+  secure: true,
+  sameSite: 'lax',
+  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  path: '/'
+};
+
 // =====================
 // SIGNUP
 // =====================
@@ -82,7 +90,8 @@ router.post('/login', async (req, res) => {
       { expiresIn: '7d' }
     );
 
-    res.json({ message: 'Login successful!', token, name: user.name, email: user.email });
+    res.cookie('token', token, COOKIE_OPTIONS);
+    res.json({ message: 'Login successful!', name: user.name, email: user.email });
   } catch (err) {
     console.error('Login error:', err);
     res.status(500).json({ message: 'Login failed' });
@@ -90,13 +99,35 @@ router.post('/login', async (req, res) => {
 });
 
 // =====================
+// LOGOUT
+// =====================
+router.post('/logout', (req, res) => {
+  res.clearCookie('token', { path: '/' });
+  res.json({ message: 'Logged out successfully' });
+});
+
+// =====================
+// CURRENT USER (for header/UI display)
+// =====================
+router.get('/me', (req, res) => {
+  const token = req.cookies.token;
+  if (!token) return res.status(401).json({ message: 'Not logged in' });
+
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    res.json({ name: decoded.name, email: decoded.email });
+  } catch (err) {
+    res.status(401).json({ message: 'Invalid or expired session' });
+  }
+});
+
+// =====================
 // GET PROFILE
 // =====================
 router.get('/profile', async (req, res) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader) return res.status(401).json({ message: 'No token provided' });
+  const token = req.cookies.token;
+  if (!token) return res.status(401).json({ message: 'No token provided' });
 
-  const token = authHeader.split(' ')[1];
   try {
     const decoded = jwt.verify(token, SECRET_KEY);
     const pool = getPool();
@@ -119,10 +150,9 @@ router.get('/profile', async (req, res) => {
 // UPDATE PROFILE
 // =====================
 router.put('/profile', async (req, res) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader) return res.status(401).json({ message: 'No token provided' });
+  const token = req.cookies.token;
+  if (!token) return res.status(401).json({ message: 'No token provided' });
 
-  const token = authHeader.split(' ')[1];
   try {
     const decoded = jwt.verify(token, SECRET_KEY);
     const { name, phone, address } = req.body;
@@ -142,10 +172,9 @@ router.put('/profile', async (req, res) => {
 // GET USER ORDERS
 // =====================
 router.get('/my-orders', async (req, res) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader) return res.status(401).json({ message: 'No token provided' });
+  const token = req.cookies.token;
+  if (!token) return res.status(401).json({ message: 'No token provided' });
 
-  const token = authHeader.split(' ')[1];
   try {
     const decoded = jwt.verify(token, SECRET_KEY);
     const pool = getPool();

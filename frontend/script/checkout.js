@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const container = document.getElementById("cartItems");
   const totalPriceEl = document.getElementById("totalPrice");
   const orderCountEl = document.querySelector('.order-count');
+  const API = 'https://am-infinity-bites-production.up.railway.app';
 
   // =====================
   // RENDER CART
@@ -98,21 +99,25 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-// At the top of placeOrder / initializePayment function
-const user = JSON.parse(localStorage.getItem("user"));
-if (!user) {
-  showPlaceOrderGuestPopup(); // ← this function comes from header.js
-  return;
-}
-// rest of your order logic continues below...
-
   // =====================
   // ORDER FORM
   // =====================
   const orderForm = document.getElementById("orderForm");
   if (orderForm) {
-    orderForm.addEventListener("submit", function (e) {
+    orderForm.addEventListener("submit", async function (e) {
       e.preventDefault();
+
+      // Guest check — now via cookie-backed /auth/me instead of localStorage "user"
+      try {
+        const res = await fetch(`${API}/auth/me`, { credentials: 'include' });
+        if (!res.ok) {
+          showPlaceOrderGuestPopup(); // ← comes from header.js
+          return;
+        }
+      } catch (err) {
+        showPlaceOrderGuestPopup();
+        return;
+      }
 
       localStorage.setItem("customerName", document.getElementById("name").value);
       localStorage.setItem("customerPhone", document.getElementById("phone").value);

@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const axios = require('axios');
 const { resend, FROM_EMAIL } = require('./emailClient');
 const authRoutes = require('./auth');
@@ -16,15 +17,17 @@ const PAYSTACK_SECRET = process.env.PAYSTACK_SECRET;
 
 const otpStore = {};
 // =====================
-// CORS — allow GitHub Pages frontend
+// CORS — allow frontend, with credentials for httpOnly cookies
 // =====================
 app.use(cors({
   origin: process.env.FRONTEND_URL || '*',
+  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json());
+app.use(cookieParser());
 app.use('/auth', authRoutes);
 app.use('/admin',adminRoutes)
 

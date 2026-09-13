@@ -260,7 +260,6 @@ document.addEventListener("DOMContentLoaded", function () {
       const signupData = await signupRes.json();
 
       if (signupData.message === "Account created successfully!") {
-        localStorage.setItem("user", JSON.stringify({ name: pendingUser.name, email: pendingUser.email }));
         showMsg(otpMessage, "Account created! Redirecting...", "success");
         clearInterval(countdownTimer);
         setTimeout(() => window.location.href = "index.html", 1500);
@@ -297,29 +296,26 @@ document.addEventListener("DOMContentLoaded", function () {
       const res = await fetch(`${API}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ email, password })
       });
 
       const data = await res.json();
 
-      if (data.token) {
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify({ name: data.name, email: email }));
+      if (res.ok) {
+        if (remember) {
+          localStorage.setItem("rememberedUser", JSON.stringify({ email }));
+        } else {
+          localStorage.removeItem("rememberedUser");
+        }
 
-      if (remember) {
-        localStorage.setItem("rememberedUser", JSON.stringify({ email }));
+        showMsg(loginMessage, "Login Successful! Redirecting...", "success");
+        setTimeout(() => window.location.href = "index.html", 1500);
+
       } else {
-        localStorage.removeItem("rememberedUser");
+        showMsg(loginMessage, data.message || "Invalid email or password", "error");
       }
 
-      showMsg(loginMessage, "Login Successful! Redirecting...", "success");
-      setTimeout(() => window.location.href = "index.html", 1500);
-
-    } else {
-      showMsg(loginMessage, data.message || "Invalid email or password", "error");
-    }
-
-    
     } catch (err) {
       showMsg(loginMessage, "Server not reachable. Start your backend!", "error");
       console.error(err);

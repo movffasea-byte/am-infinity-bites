@@ -1,45 +1,34 @@
 // header.js — Runs on every page
 // - Logged-in users: shows "Hi [Firstname]" on ALL pages, links to dashboard.html
-// - Guests on a.mstarts.html / checkout.html: shows "Dashboard"
-// - Guests on all other pages: shows "Hi Guest" (they shouldn't normally reach these pages without logging in)
+// - Guests: shows "Dashboard"
+// Identity now comes from an httpOnly cookie via GET /auth/me — no localStorage read.
 
-(function () {
+(async function () {
   const accountName = document.getElementById("accountName");
   const accountBtn  = document.getElementById("accountBtn");
 
   if (!accountName) return;
 
-  // Read user from localStorage (set at login)
-  const stored = localStorage.getItem("user");
+  const API = 'https://am-infinity-bites-production.up.railway.app';
+
   let user = null;
-  try { user = stored ? JSON.parse(stored) : null; } catch (e) { user = null; }
+  try {
+    const res = await fetch(`${API}/auth/me`, { credentials: 'include' });
+    if (res.ok) {
+      user = await res.json();
+    }
+  } catch (e) {
+    user = null;
+  }
 
-  const currentPage = window.location.pathname.split("/").pop() || "index.html";
-
-  // Pages where guests should see "Dashboard" instead of "Hi Guest"
-  const guestDashboardPages = ["index .html", ""];
-
-  if (user && (user.name || user.firstName)) {
+  if (user && user.name) {
     // ── LOGGED IN ──
-    // Extract just the first name
-    const fullName = user.name || user.firstName || "";
-    const firstName = fullName.trim().split(" ")[0];
-
+    const firstName = user.name.trim().split(" ")[0];
     accountName.textContent = "Hi " + firstName;
-
-    // Make sure the link always goes to dashboard when logged in
     if (accountBtn) accountBtn.setAttribute("href", "dashboard.html");
-
   } else {
     // ── GUEST ──
-    if (guestDashboardPages.includes(currentPage)) {
-      accountName.textContent = "Dashboard";
-    } else {
-      // On order-confirm, payment-success etc. guests shouldn't normally be here
-      // but show "Dashboard" gracefully
-      accountName.textContent = "Dashboard";
-    }
-
+    accountName.textContent = "Dashboard";
     if (accountBtn) accountBtn.setAttribute("href", "dashboard.html");
   }
 })();
